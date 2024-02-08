@@ -1,6 +1,7 @@
 import std;
 
 #include "./headers/color.h"
+#include "./headers/ray.h"
 
 int main()
 {
