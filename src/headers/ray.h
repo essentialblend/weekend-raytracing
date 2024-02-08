@@ -18,7 +18,7 @@ public:
 	}
 	vec3 getPointOnRayAt(double scaleFac) const
 	{
-		return rayOrigin + (rayDirection * scaleFac);
+		return rayOrigin + (scaleFac * rayDirection);
 	}
 
 private:
