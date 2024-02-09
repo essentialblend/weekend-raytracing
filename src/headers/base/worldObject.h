@@ -2,17 +2,17 @@
 
 #include "ray.h"
 
-class hitRecord
+class HitRecord
 {
 public:
 	// 
-	vec3 hitPoint;
-	vec3 pointNormal;
+	Vec3 hitPoint;
+	Vec3 pointNormal;
 	// Scalar (t) for a + t*b.
 	double rayT;
 	bool frontFace;
 
-	void setFaceNormal(const ray& currRay, const vec3& outwardNormal)
+	void setFaceNormal(const Ray& currRay, const Vec3& outwardNormal)
 	{
 		// Set the hit record normal vector. outwardNormal is expected to be normalized.
 
@@ -21,10 +21,10 @@ public:
 	}
 };
 
-class worldObject
+class WorldObject
 {
 public:
-	virtual ~worldObject() = default;
+	virtual ~WorldObject() = default;
 
-	virtual bool rayHit(const ray& currRay, UInterval validRayInterval,  hitRecord& hitRec) const = 0;
+	virtual bool rayHit(const Ray& currRay, UInterval validRayInterval,  HitRecord& hitRec) const = 0;
 };

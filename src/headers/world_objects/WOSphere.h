@@ -1,14 +1,14 @@
 #pragma once
 #include "../base/worldObject.h"
 
-class WOSphere : public worldObject
+class WOSphere : public WorldObject
 {
 public:
-	WOSphere(vec3 sphereCenter, double sphereRad) : sphereCenter(sphereCenter), sphereRad(sphereRad) {}
+	WOSphere(Vec3 sphereCenter, double sphereRad) : sphereCenter(sphereCenter), sphereRad(sphereRad) {}
 
-	bool rayHit(const ray& currRay, UInterval validRayInterval, hitRecord& hitRec) const override
+	bool rayHit(const Ray& currRay, UInterval validRayInterval, HitRecord& hitRec) const override
 	{
-		vec3 centerToOriginDir = currRay.getRayOrigin() - sphereCenter;
+		Vec3 centerToOriginDir = currRay.getRayOrigin() - sphereCenter;
 
 		// a, b, and c for the quadratic equation.
 		double a = currRay.getRayDirection().getLengthSquared();
@@ -32,13 +32,13 @@ public:
 		hitRec.hitPoint = currRay.getPointOnRayAt(hitRec.rayT);
 		hitRec.pointNormal = (hitRec.hitPoint - sphereCenter) / sphereRad;
 
-		vec3 outwardNormal = (hitRec.hitPoint - sphereCenter) / sphereRad;
+		Vec3 outwardNormal = (hitRec.hitPoint - sphereCenter) / sphereRad;
 		hitRec.setFaceNormal(currRay, outwardNormal);
 
 		return true;
 ;	}
 
 private:
-	vec3 sphereCenter;
+	Vec3 sphereCenter;
 	double sphereRad;
 };

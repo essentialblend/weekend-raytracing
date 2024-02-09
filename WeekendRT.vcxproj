@@ -138,6 +138,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\headers\base\camera.h" />
     <ClInclude Include="src\headers\base\color.h" />
     <ClInclude Include="src\headers\base\ray.h" />
     <ClInclude Include="src\headers\base\UInterval.h" />

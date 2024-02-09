@@ -2,13 +2,13 @@
 
 import std;
 
-class vec3 {
+class Vec3 {
 public:
 	double baseVec3[3];
 
-	vec3() : baseVec3{ 0, 0, 0 } {};
-	vec3(double first) : baseVec3{ first, first, first } {};
-	vec3(double first, double second, double third) : baseVec3{ first, second, third } {};
+	Vec3() : baseVec3{ 0, 0, 0 } {};
+	Vec3(double first) : baseVec3{ first, first, first } {};
+	Vec3(double first, double second, double third) : baseVec3{ first, second, third } {};
 
 	double getFirstComponent() const
 	{
@@ -23,9 +23,9 @@ public:
 		return baseVec3[2];
 	}
 
-	vec3 operator-() const 
+	Vec3 operator-() const 
 	{
-		return vec3(-baseVec3[0], -baseVec3[1], -baseVec3[2]);
+		return Vec3(-baseVec3[0], -baseVec3[1], -baseVec3[2]);
 	}
 	double operator[](const int i) const
 	{
@@ -36,14 +36,14 @@ public:
 		return baseVec3[i];
 	}
 
-	vec3& operator+= (const vec3& inputVec)
+	Vec3& operator+= (const Vec3& inputVec)
 	{
 		baseVec3[0] += inputVec[0];
 		baseVec3[1] += inputVec[1];
 		baseVec3[2] += inputVec[2];
 		return *this;
 	}
-	vec3& operator*= (const double scaleFactor)
+	Vec3& operator*= (const double scaleFactor)
 	{
 		baseVec3[0] *= scaleFactor;
 		baseVec3[1] *= scaleFactor;
@@ -51,7 +51,7 @@ public:
 		return *this;
 	}
 
-	const vec3& operator/= (const double scaleFactor)
+	const Vec3& operator/= (const double scaleFactor)
 	{
 		return (*this *= (1 / scaleFactor));
 	}
@@ -68,53 +68,53 @@ public:
 
 };
 
-inline std::ostream& operator<<(std::ostream& outStream, const vec3& inputVec)
+inline std::ostream& operator<<(std::ostream& outStream, const Vec3& inputVec)
 {
 	return outStream << inputVec.baseVec3[0] << ' ' << inputVec.baseVec3[1] << inputVec.baseVec3[2];
 }
 
-inline vec3 operator+(const vec3& firstVec, const vec3& secondVec)
+inline Vec3 operator+(const Vec3& firstVec, const Vec3& secondVec)
 {
-	return vec3(firstVec.baseVec3[0] + secondVec.baseVec3[0], firstVec.baseVec3[1] + secondVec.baseVec3[1], firstVec.baseVec3[2] + secondVec.baseVec3[2]);
+	return Vec3(firstVec.baseVec3[0] + secondVec.baseVec3[0], firstVec.baseVec3[1] + secondVec.baseVec3[1], firstVec.baseVec3[2] + secondVec.baseVec3[2]);
 }
 
-inline vec3 operator-(const vec3& firstVec, const vec3& secondVec)
+inline Vec3 operator-(const Vec3& firstVec, const Vec3& secondVec)
 {
-	return vec3(firstVec.baseVec3[0] - secondVec.baseVec3[0], firstVec.baseVec3[1] - secondVec.baseVec3[1], firstVec.baseVec3[2] - secondVec.baseVec3[2]);
+	return Vec3(firstVec.baseVec3[0] - secondVec.baseVec3[0], firstVec.baseVec3[1] - secondVec.baseVec3[1], firstVec.baseVec3[2] - secondVec.baseVec3[2]);
 }
 
-inline vec3 operator*(const vec3& firstVec, const vec3& secondVec)
+inline Vec3 operator*(const Vec3& firstVec, const Vec3& secondVec)
 {
-	return vec3(firstVec.baseVec3[0] * secondVec.baseVec3[0], firstVec.baseVec3[1] * secondVec.baseVec3[1], firstVec.baseVec3[2] * secondVec.baseVec3[2]);
+	return Vec3(firstVec.baseVec3[0] * secondVec.baseVec3[0], firstVec.baseVec3[1] * secondVec.baseVec3[1], firstVec.baseVec3[2] * secondVec.baseVec3[2]);
 }
 
-inline vec3 operator*(double scaleFac, const vec3& firstVec)
+inline Vec3 operator*(double scaleFac, const Vec3& firstVec)
 {
-	return vec3(scaleFac * firstVec.getFirstComponent(), scaleFac * firstVec.getSecondComponent(), scaleFac * firstVec.getThirdComponent());
+	return Vec3(scaleFac * firstVec.getFirstComponent(), scaleFac * firstVec.getSecondComponent(), scaleFac * firstVec.getThirdComponent());
 }
 
-inline vec3 operator*(const vec3& firstVec, double scaleFac)
+inline Vec3 operator*(const Vec3& firstVec, double scaleFac)
 {
 	return scaleFac * firstVec;
 }
 
 
-inline vec3 operator/(vec3 firstVec, double scaleFac)
+inline Vec3 operator/(Vec3 firstVec, double scaleFac)
 {
 	return (1 / scaleFac) * firstVec;
 }
 
-inline double computeDotProduct(const vec3& firstVec, const vec3& secondVec)
+inline double computeDotProduct(const Vec3& firstVec, const Vec3& secondVec)
 {
 	return (firstVec[0] * secondVec[0]) + (firstVec[1] * secondVec[1]) + (firstVec[2] * secondVec[2]);
 };
 
-inline vec3 computeCrossProduct(const vec3& firstVec, const vec3& secondVec)
+inline Vec3 computeCrossProduct(const Vec3& firstVec, const Vec3& secondVec)
 {
-	return vec3((firstVec.baseVec3[1] * secondVec.baseVec3[2] - firstVec.baseVec3[2] * secondVec.baseVec3[1]), (firstVec.baseVec3[2] * secondVec.baseVec3[0] - firstVec.baseVec3[0] * secondVec.baseVec3[2]), (firstVec.baseVec3[0] * secondVec.baseVec3[1] - firstVec.baseVec3[1] * secondVec.baseVec3[0]));
+	return Vec3((firstVec.baseVec3[1] * secondVec.baseVec3[2] - firstVec.baseVec3[2] * secondVec.baseVec3[1]), (firstVec.baseVec3[2] * secondVec.baseVec3[0] - firstVec.baseVec3[0] * secondVec.baseVec3[2]), (firstVec.baseVec3[0] * secondVec.baseVec3[1] - firstVec.baseVec3[1] * secondVec.baseVec3[0]));
 }
 
-inline vec3 computeUnitVector(const vec3& inputVec)
+inline Vec3 computeUnitVector(const Vec3& inputVec)
 {
 	return inputVec / inputVec.getLength();
 }

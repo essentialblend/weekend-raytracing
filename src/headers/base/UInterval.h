@@ -19,6 +19,13 @@ public:
 		return minValue < x && x < maxValue;
 	}
 
+	double clampToIntervalRange(double valToClamp) const
+	{
+		if (valToClamp < minValue) return minValue;
+		if (valToClamp > maxValue) return maxValue;
+		return valToClamp;
+	}
+
 	static const UInterval emptyInterval, universeInterval;
 };
 

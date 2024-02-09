@@ -3,15 +3,15 @@ import std;
 
 #include "worldObject.h"
 
-class worldObjectList : public worldObject
+class WorldObjectList : public WorldObject
 {
 public:
-	std::vector<std::shared_ptr<worldObject>> worldObjects;
+	std::vector<std::shared_ptr<WorldObject>> worldObjects;
 
-	worldObjectList() {}
-	worldObjectList(std::shared_ptr<worldObject> worldObjToAdd) { addWOToList(worldObjToAdd); }
+	WorldObjectList() {}
+	WorldObjectList(std::shared_ptr<WorldObject> worldObjToAdd) { addWOToList(worldObjToAdd); }
 
-	void addWOToList(std::shared_ptr<worldObject> worldObjToAdd)
+	void addWOToList(std::shared_ptr<WorldObject> worldObjToAdd)
 	{
 		worldObjects.push_back(worldObjToAdd);
 	}
@@ -20,9 +20,9 @@ public:
 		worldObjects.clear();
 	}
 
-	bool rayHit(const ray& currRay, UInterval validRayInterval, hitRecord& hitRec) const override
+	bool rayHit(const Ray& currRay, UInterval validRayInterval, HitRecord& hitRec) const override
 	{
-		hitRecord tempRec;
+		HitRecord tempRec;
 		bool didItHit{ false };
 		double closestYet = validRayInterval.maxValue;
 

@@ -2,26 +2,26 @@
 
 #include "vec3.h"
 
-class ray
+class Ray
 {
 public:
-	ray() {}
-	ray(const vec3& originParam, const vec3& directionParam) : rayOrigin(originParam), rayDirection(directionParam) {}
+	Ray() {}
+	Ray(const Vec3& originParam, const Vec3& directionParam) : rayOrigin(originParam), rayDirection(directionParam) {}
 
-	vec3 getRayOrigin() const
+	Vec3 getRayOrigin() const
 	{
 		return rayOrigin;
 	}
-	vec3 getRayDirection() const
+	Vec3 getRayDirection() const
 	{
 		return rayDirection;
 	}
-	vec3 getPointOnRayAt(double scaleFac) const
+	Vec3 getPointOnRayAt(double scaleFac) const
 	{
 		return rayOrigin + (scaleFac * rayDirection);
 	}
 
 private:
-	vec3 rayOrigin;
-	vec3 rayDirection;
+	Vec3 rayOrigin;
+	Vec3 rayDirection;
 };
