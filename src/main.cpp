@@ -1,14 +1,9 @@
 import std;
 
-#include "./headers/color.h"
-#include "./headers/ray.h"
+#include "./headers/base/color.h"
+#include "./headers/base/ray.h"
 
-static vec3 getRayColor(const ray& inputRay)
-{
-	vec3 directionUnitVector{ computeUnitVector(inputRay.getRayDirection()) };
-	double lerpFac = 0.5f * (directionUnitVector.getSecondComponent() + 1.f);
-	return (((1.f - lerpFac) * vec3(1.f)) + (lerpFac * vec3(0.5f, 0.7f, 1.f)));
-}
+static vec3 getRayColor(const ray& inputRay);
 
 int main()
 {
@@ -33,7 +28,6 @@ int main()
 
 	// Location of the top left pixel.
 	vec3 viewportUpperLeftNorm = cameraCenter - vec3(0, 0, focalLength) - (viewportUX / 2) - (viewportVY / 2);
-
 	vec3 topLeftPixelLocation = viewportUpperLeftNorm + (0.5f * (pixelDeltaUX + pixelDeltaVY));
 
 
@@ -55,4 +49,19 @@ int main()
 	}
 	std::clog << "----DONE-----\n";
 	return 0;
+}
+
+static vec3 getRayColor(const ray& inputRay)
+{
+	double checkSphereHit = hitSphere(vec3(0.f, 0.f, -1.f), 0.5f, inputRay);
+	if (checkSphereHit > 0.f)
+	{
+		vec3 N = computeUnitVector(inputRay.getPointOnRayAt(checkSphereHit) - vec3(0.f, 0.f, -1.f));
+		return (0.5f * vec3(N.getFirstComponent() + 1, N.getSecondComponent() + 1, N.getThirdComponent() + 1));
+	}
+
+	// If not, background gradient.
+	vec3 directionUnitVector{ computeUnitVector(inputRay.getRayDirection()) };
+	double lerpFac = 0.5f * (directionUnitVector.getSecondComponent() + 1.f);
+	return (((1.f - lerpFac) * vec3(1.f)) + (lerpFac * vec3(0.5f, 0.7f, 1.f)));
 }

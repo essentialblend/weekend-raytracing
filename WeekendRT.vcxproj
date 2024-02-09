@@ -138,9 +138,12 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\headers\color.h" />
-    <ClInclude Include="src\headers\ray.h" />
-    <ClInclude Include="src\headers\vec3.h" />
+    <ClInclude Include="src\headers\base\color.h" />
+    <ClInclude Include="src\headers\base\ray.h" />
+    <ClInclude Include="src\headers\base\vec3.h" />
+    <ClInclude Include="src\headers\base\worldObject.h" />
+    <ClInclude Include="src\headers\base\worldObjectList.h" />
+    <ClInclude Include="src\headers\world_objects\WOSphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,13 +20,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\headers\vec3.h">
+    <ClInclude Include="src\headers\base\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\headers\color.h">
+    <ClInclude Include="src\headers\base\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\headers\ray.h">
+    <ClInclude Include="src\headers\base\ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\base\worldObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\world_objects\WOSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\base\worldObjectList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
