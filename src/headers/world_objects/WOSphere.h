@@ -28,7 +28,7 @@ public:
 			if(minRoot <= rayTMin || rayTMax <= minRoot) return false;
 		}
 
-		hitRec.rayT = discrSqrRoot;
+		hitRec.rayT = minRoot;
 		hitRec.hitPoint = currRay.getPointOnRayAt(hitRec.rayT);
 		hitRec.pointNormal = (hitRec.hitPoint - sphereCenter) / sphereRad;
 

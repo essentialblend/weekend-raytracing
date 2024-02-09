@@ -1,9 +1,8 @@
 import std;
 
-#include "./headers/base/color.h"
-#include "./headers/base/ray.h"
+#include "./headers/base/util.h"
 
-static vec3 getRayColor(const ray& inputRay);
+static vec3 getRayColor(const ray& inputRay, const worldObject& mainWorld);
 
 int main()
 {
@@ -13,6 +12,11 @@ int main()
 	
 	unsigned short imageHeight{ static_cast<int>(imageWidth / aspectRatio) };
 	imageHeight = (imageHeight < 1) ? 1 : imageHeight;
+
+	// World
+	worldObjectList primaryWorldObjList;
+	primaryWorldObjList.addWOToList(std::make_shared<WOSphere>(vec3(0, 0, -1.f), 0.5f));
+	primaryWorldObjList.addWOToList(std::make_shared<WOSphere>(vec3(0, -100.5, -1.f), 100.f));
 
 	// Camera
 	double focalLength = 1.0f;
@@ -43,7 +47,7 @@ int main()
 			vec3 rayDirection = pixelCenter - cameraCenter;
 			ray cameraRay{ cameraCenter, rayDirection };
 
-			vec3 pixelColor = getRayColor(cameraRay);
+			vec3 pixelColor = getRayColor(cameraRay, primaryWorldObjList);
 			writeColor(std::cout, pixelColor);
 		}
 	}
@@ -51,17 +55,17 @@ int main()
 	return 0;
 }
 
-static vec3 getRayColor(const ray& inputRay)
+static vec3 getRayColor(const ray& inputRay, const worldObject& mainWorld)
 {
-	double checkSphereHit = hitSphere(vec3(0.f, 0.f, -1.f), 0.5f, inputRay);
-	if (checkSphereHit > 0.f)
+	hitRecord hitRec;
+
+	if (mainWorld.rayHit(inputRay, 0, inf, hitRec))
 	{
-		vec3 N = computeUnitVector(inputRay.getPointOnRayAt(checkSphereHit) - vec3(0.f, 0.f, -1.f));
-		return (0.5f * vec3(N.getFirstComponent() + 1, N.getSecondComponent() + 1, N.getThirdComponent() + 1));
+		return (0.5f * (hitRec.pointNormal + vec3(1.f)));
 	}
 
-	// If not, background gradient.
-	vec3 directionUnitVector{ computeUnitVector(inputRay.getRayDirection()) };
-	double lerpFac = 0.5f * (directionUnitVector.getSecondComponent() + 1.f);
-	return (((1.f - lerpFac) * vec3(1.f)) + (lerpFac * vec3(0.5f, 0.7f, 1.f)));
+	vec3 unitDirectionNorm = computeUnitVector(inputRay.getRayDirection());
+	double lerpFactor = 0.5 * (unitDirectionNorm.getSecondComponent() + 1.f);
+	return (((1.f - lerpFactor) * (vec3(1.f))) + (lerpFactor * vec3(0.5f, 0.7f, 1.f)));
+
 }
