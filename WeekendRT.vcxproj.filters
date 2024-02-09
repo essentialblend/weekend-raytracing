@@ -41,5 +41,8 @@
     <ClInclude Include="src\headers\base\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\base\UInterval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

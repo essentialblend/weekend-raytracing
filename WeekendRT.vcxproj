@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="src\headers\base\color.h" />
     <ClInclude Include="src\headers\base\ray.h" />
+    <ClInclude Include="src\headers\base\UInterval.h" />
     <ClInclude Include="src\headers\base\util.h" />
     <ClInclude Include="src\headers\base\vec3.h" />
     <ClInclude Include="src\headers\base\worldObject.h" />

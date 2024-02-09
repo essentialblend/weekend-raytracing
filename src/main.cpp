@@ -59,13 +59,14 @@ static vec3 getRayColor(const ray& inputRay, const worldObject& mainWorld)
 {
 	hitRecord hitRec;
 
-	if (mainWorld.rayHit(inputRay, 0, inf, hitRec))
+	if (mainWorld.rayHit(inputRay, UInterval(0, Uinf), hitRec))
 	{
 		return (0.5f * (hitRec.pointNormal + vec3(1.f)));
 	}
 
 	vec3 unitDirectionNorm = computeUnitVector(inputRay.getRayDirection());
 	double lerpFactor = 0.5 * (unitDirectionNorm.getSecondComponent() + 1.f);
+
 	return (((1.f - lerpFactor) * (vec3(1.f))) + (lerpFactor * vec3(0.5f, 0.7f, 1.f)));
 
 }

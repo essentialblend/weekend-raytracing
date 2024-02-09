@@ -20,15 +20,15 @@ public:
 		worldObjects.clear();
 	}
 
-	bool rayHit(const ray& currRay, double rayTMin, double rayTMax, hitRecord& hitRec) const override 
+	bool rayHit(const ray& currRay, UInterval validRayInterval, hitRecord& hitRec) const override
 	{
 		hitRecord tempRec;
 		bool didItHit{ false };
-		double closestYet = rayTMax;
+		double closestYet = validRayInterval.maxValue;
 
 		for (const auto& object : worldObjects)
 		{
-			if (object->rayHit(currRay, rayTMin, closestYet, tempRec))
+			if (object->rayHit(currRay, UInterval(validRayInterval.minValue, closestYet), tempRec))
 			{
 				didItHit = true;
 				closestYet = tempRec.rayT;

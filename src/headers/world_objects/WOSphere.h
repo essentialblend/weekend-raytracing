@@ -6,7 +6,7 @@ class WOSphere : public worldObject
 public:
 	WOSphere(vec3 sphereCenter, double sphereRad) : sphereCenter(sphereCenter), sphereRad(sphereRad) {}
 
-	bool rayHit(const ray& currRay, double rayTMin, double rayTMax, hitRecord& hitRec) const override
+	bool rayHit(const ray& currRay, UInterval validRayInterval, hitRecord& hitRec) const override
 	{
 		vec3 centerToOriginDir = currRay.getRayOrigin() - sphereCenter;
 
@@ -22,10 +22,10 @@ public:
 
 		// Find nearest root in acceptable range.
 		auto minRoot = (-halfB - discrSqrRoot) / a;
-		if (minRoot <= rayTMin || rayTMax <= minRoot)
+		if (!validRayInterval.isStrictlyWithinBounds(minRoot))
 		{
 			minRoot = (-halfB + discrSqrRoot) / a;
-			if(minRoot <= rayTMin || rayTMax <= minRoot) return false;
+			if(!validRayInterval.isStrictlyWithinBounds(minRoot)) return false;
 		}
 
 		hitRec.rayT = minRoot;

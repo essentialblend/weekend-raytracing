@@ -26,5 +26,5 @@ class worldObject
 public:
 	virtual ~worldObject() = default;
 
-	virtual bool rayHit(const ray& currRay, double rayTMin, double rayTMax, hitRecord& hitRec) const = 0;
+	virtual bool rayHit(const ray& currRay, UInterval validRayInterval,  hitRecord& hitRec) const = 0;
 };
