@@ -1,13 +1,13 @@
 #pragma once
 
-class UInterval
+class Interval
 {
 public:
 	double minValue{ 0 };
 	double maxValue{ 0 };
 
-	UInterval() : minValue(+Uinf), maxValue(-Uinf) {}
-	UInterval(double minVal, double maxVal) : minValue(minVal), maxValue(maxVal) {}
+	Interval() : minValue(+Uinf), maxValue(-Uinf) {}
+	Interval(double minVal, double maxVal) : minValue(minVal), maxValue(maxVal) {}
 
 	bool isWithinBounds(double x) const
 	{
@@ -26,8 +26,8 @@ public:
 		return valToClamp;
 	}
 
-	static const UInterval emptyInterval, universeInterval;
+	static const Interval emptyInterval, universeInterval;
 };
 
-const static UInterval emptyInterval(+Uinf, -Uinf);
-const static UInterval universeInterval(-Uinf, +Uinf);
+const static Interval emptyInterval(+Uinf, -Uinf);
+const static Interval universeInterval(-Uinf, +Uinf);

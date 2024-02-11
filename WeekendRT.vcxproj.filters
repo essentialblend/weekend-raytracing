@@ -41,10 +41,13 @@
     <ClInclude Include="src\headers\base\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\headers\base\UInterval.h">
+    <ClInclude Include="src\headers\base\interval.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\headers\base\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\base\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

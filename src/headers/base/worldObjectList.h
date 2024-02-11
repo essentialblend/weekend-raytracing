@@ -6,7 +6,7 @@ import std;
 class WorldObjectList : public WorldObject
 {
 public:
-	std::vector<std::shared_ptr<WorldObject>> worldObjects;
+
 
 	WorldObjectList() {}
 	WorldObjectList(std::shared_ptr<WorldObject> worldObjToAdd) { addWOToList(worldObjToAdd); }
@@ -20,21 +20,23 @@ public:
 		worldObjects.clear();
 	}
 
-	bool rayHit(const Ray& currRay, UInterval validRayInterval, HitRecord& hitRec) const override
+	bool rayHit(const Ray& currRay, Interval validRayInterval, HitRecord& hitRec) const override
 	{
 		HitRecord tempRec;
 		bool didItHit{ false };
-		double closestYet = validRayInterval.maxValue;
+		double closestRootYet = validRayInterval.maxValue;
 
 		for (const auto& object : worldObjects)
 		{
-			if (object->rayHit(currRay, UInterval(validRayInterval.minValue, closestYet), tempRec))
+			if (object->rayHit(currRay, Interval(validRayInterval.minValue, closestRootYet), tempRec))
 			{
 				didItHit = true;
-				closestYet = tempRec.rayT;
+				closestRootYet = tempRec.hitRoot;
 				hitRec = tempRec;
 			}
 		}
 		return didItHit;
 	}
+private:
+	std::vector<std::shared_ptr<WorldObject>> worldObjects;
 };
