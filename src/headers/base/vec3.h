@@ -66,6 +66,15 @@ public:
 		return std::sqrt(getLengthSquared());
 	}
 
+	static Vec3 genRNGVec3()
+	{
+		return Vec3(UGenRNGDouble(), UGenRNGDouble(), UGenRNGDouble());
+	}
+
+	static Vec3 genRNGVec3(double minRange, double maxRange)
+	{
+		return Vec3(UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange));
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& outStream, const Vec3& inputVec)
@@ -119,9 +128,27 @@ inline Vec3 computeUnitVector(const Vec3& inputVec)
 	return inputVec / inputVec.getLength();
 }
 
+inline Vec3 genRandVecInUnitSphere()
+{
+	while (true)
+	{
+		Vec3 randVec{ Vec3::genRNGVec3(-1.f, 1.f) };
+		if (randVec.getLengthSquared() < 1) 
+		{ 
+			return randVec;
+		}
+	}
+}
 
-
-
-
+inline Vec3 genRandRayOnHemisphere(const Vec3& normalVec)
+{
+	Vec3 vecOnUnitSphere = computeUnitVector(genRandVecInUnitSphere());
+	if (computeDotProduct(vecOnUnitSphere, normalVec) > 0.f)
+	{
+		return vecOnUnitSphere;
+	}
+	else
+		return -vecOnUnitSphere;
+}
 
 
