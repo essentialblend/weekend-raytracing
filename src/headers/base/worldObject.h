@@ -2,11 +2,14 @@
 
 #include "ray.h"
 
+class Material;
+
 class HitRecord
 {
 public:
 	Vec3 hitPoint;
 	Vec3 hitNormalVec;
+	std::shared_ptr<Material> hitRecMaterial;
 	// Scalar (t) for a + t*b.
 	double hitRoot;
 	bool frontFace;

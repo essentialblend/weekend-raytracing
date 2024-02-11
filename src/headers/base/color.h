@@ -15,9 +15,15 @@ void writeColor(std::ostream& outStream, Vec3 pixelColor, int samplesPerPixel)
 
 	// Divide color by num samples.
 	double pixelColorScale{ 1.f / samplesPerPixel };
-	r *= linearToGamma(pixelColorScale);
-	g *= linearToGamma(pixelColorScale);
-	b *= linearToGamma(pixelColorScale);
+	r *= pixelColorScale;
+	g *= pixelColorScale;
+	b *= pixelColorScale;
+
+	//Apply linear to gamma conversion.
+	r = linearToGamma(r);
+	g = linearToGamma(g);
+	b = linearToGamma(b);
+
 
 	// Write the translated [0, 255] value per component.
 	static const Interval pixelIntensity(0.f, 0.999f);

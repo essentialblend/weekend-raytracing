@@ -4,7 +4,7 @@
 class WOSphere : public WorldObject
 {
 public:
-	WOSphere(Vec3 sphereCenter, double sphereRad) : sphereCenter(sphereCenter), sphereRad(sphereRad) {}
+	WOSphere(Vec3 sphereCenter, double sphereRad, std::shared_ptr<Material> WOMaterial) : sphereCenter(sphereCenter), sphereRad(sphereRad), WOMaterial(WOMaterial) {}
 
 	bool rayHit(const Ray& currRay, Interval validRayInterval, HitRecord& hitRec) const override
 	{
@@ -33,6 +33,7 @@ public:
 		hitRec.hitNormalVec = (hitRec.hitPoint - sphereCenter) / sphereRad;
 
 		hitRec.setFaceNormal(currRay, hitRec.hitNormalVec);
+		hitRec.hitRecMaterial = WOMaterial;
 
 		return true;
 ;	}
@@ -40,4 +41,5 @@ public:
 private:
 	Vec3 sphereCenter;
 	double sphereRad;
+	std::shared_ptr<Material> WOMaterial;
 };

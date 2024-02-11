@@ -75,6 +75,13 @@ public:
 	{
 		return Vec3(UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange));
 	}
+
+	bool checkZeroScatter() const
+	{
+		auto s = 1e-8;
+		return (std::fabs(baseVec3[0]) < s) && (std::fabs(baseVec3[1]) < s) && (std::fabs(baseVec3[2]) < s);
+
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& outStream, const Vec3& inputVec)
@@ -149,6 +156,11 @@ inline Vec3 genRandRayOnHemisphere(const Vec3& normalVec)
 	}
 	else
 		return -vecOnUnitSphere;
+}
+
+inline Vec3 reflectRay(const Vec3& inputVec, const Vec3& normalVec)
+{
+	return inputVec - (2 * computeDotProduct(inputVec, normalVec) * normalVec);
 }
 
 

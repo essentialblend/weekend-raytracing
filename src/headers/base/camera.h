@@ -3,6 +3,7 @@
 #include "util.h"
 #include "color.h"
 #include "worldObject.h"
+#include "material.h"
 
 class Camera
 {
@@ -96,15 +97,22 @@ private:
 		}
 
 		// If we hit an object, compute its color.
-		if (mainWorld.rayHit(inputRay, Interval(0.00001, Uinf), hitRec))
+		if (mainWorld.rayHit(inputRay, Interval(0.001, Uinf), hitRec))
 		{
-			Vec3 reflectedDiffuseRayDir { hitRec.hitNormalVec + computeUnitVector(genRandVecInUnitSphere())};
-			return (0.1f * computeRayColor(Ray(hitRec.hitPoint, reflectedDiffuseRayDir), mainWorld, rayBounces - 1));
+			Ray scatteredRay;
+			Vec3 attenuationValue;
+			if (hitRec.hitRecMaterial->scatterLight(inputRay, hitRec, attenuationValue, scatteredRay))
+			{
+				return attenuationValue * computeRayColor(scatteredRay, mainWorld, rayBounces - 1);
+			}
+			return Vec3(0.f);
 		}
+
 		// Else, go with the background color scheme.
 		Vec3 unitDirectionNorm{ computeUnitVector(inputRay.getRayDirection()) };
 		double lerpFactor{ 0.5 * (unitDirectionNorm.getSecondComponent() + 1.f) };
-		return (((1.f - lerpFactor) * (Vec3(1.f))) + (lerpFactor * Vec3(0.5f, 0.7f, 1.f)));
+
+		return (((1.f - lerpFactor) * (Vec3(1.f))) + (lerpFactor * Vec3(0.5f, 0, 1.f)));
 	}
 
 	Vec3 pixelSampleSquare() const
