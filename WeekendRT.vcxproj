@@ -147,6 +147,7 @@
     <ClInclude Include="src\headers\base\vec3.h" />
     <ClInclude Include="src\headers\base\worldObject.h" />
     <ClInclude Include="src\headers\base\worldObjectList.h" />
+    <ClInclude Include="src\headers\materials\dielectric.h" />
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
     <ClInclude Include="src\headers\world_objects\WOSphere.h" />

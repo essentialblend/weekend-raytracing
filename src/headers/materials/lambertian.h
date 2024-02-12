@@ -7,7 +7,7 @@ class MLambertian : public Material
 public:
 	MLambertian(const Vec3& matCol) : albedoLambertian(matCol) {}
 
-	bool scatterLight(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
+	bool scatterRay(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
 	{
 		Vec3 scatteredRayDir = hitRec.hitNormalVec + computeUnitVector(genRandVecInUnitSphere());
 

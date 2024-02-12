@@ -9,7 +9,7 @@ class Camera
 {
 public:
 
-	Camera(double aspectR, int imageWidth, int numSamples, int rayBounces) : aspectRatio(aspectR), imageWidth(imageWidth), samplesPerPixelMSAA(numSamples), maxRayBounces(rayBounces) {}
+	Camera(double aspectR, int imageWidth, int numSamples, int rayBounces, double vFOV) : aspectRatio(aspectR), imageWidth(imageWidth), samplesPerPixelMSAA(numSamples), maxRayBounces(rayBounces), verticalFOV(vFOV) {}
 
 	void renderFrame(const WorldObject& mainWorld)
 	{
@@ -43,6 +43,20 @@ public:
 		std::clog << "Render complete! Time: " << renderTimeH.count() << "h " << renderTimeM.count() << "m " << renderTimeS.count() << "s!\n";
 	}
 
+	void setVerticalFOV(double fovVal)
+	{
+		verticalFOV = fovVal;
+	}
+
+	void setCameraParams(const Vec3 lookFrom, const Vec3 lookAt, const Vec3 relativeUp, double defocusA, double focusD)
+	{
+		lookFromPoint = lookFrom;
+		lookAtPoint = lookAt;
+		orthoCamUpV = relativeUp;
+		defocusAngle = defocusA;
+		focusDist = focusD;
+	}
+
 private:
 	double aspectRatio{ 1.f };
 	int imageWidth{ 100 };
@@ -50,7 +64,21 @@ private:
 	int imageHeight{ 0 };
 	int maxRayBounces = 10;
 
+	// Camera
+	double verticalFOV{ 90.f };
 	Vec3 camCenterPoint;
+	Vec3 lookFromPoint{ Vec3(0, 0, -1) };
+	Vec3 lookAtPoint{ Vec3(0) };
+	Vec3 orthoCamUpV{ Vec3(0, 1, 0) };
+	Vec3 camOrthoBasisU{ Vec3(0.f) }, camOrthoBasisV{ Vec3(0.f) }, camOrthoBasisW{ Vec3(0.f) };
+	//Variation angle of rays through each pixel.
+	double defocusAngle{ 0.f };
+	// Dist from camera lookFrom point to plane of perfect focus.
+	double focusDist{ 10.f };
+	Vec3 defocusDiskHor{ Vec3(0.f) };
+	Vec3 defocusDiskVert{ Vec3(0.f) };
+
+
 	Vec3 firstPixelLocationPoint;
 	Vec3 pixelDeltaUX;
 	Vec3 pixelDeltaVY;
@@ -60,20 +88,33 @@ private:
 		imageHeight = static_cast<int>(imageWidth / aspectRatio);
 		imageHeight = (imageHeight < 1) ? 1 : imageHeight;
 
-		double focalLength{ 1.0f };
-		double viewportHeight{ 2.0f };
+
+		camCenterPoint = lookFromPoint;
+
+		double theta = UDegreesToRadians(verticalFOV);
+		double h = std::tan(theta / 2);
+		double viewportHeight{ 2.0f * h * focusDist };
 		double viewportWidth{ viewportHeight * (static_cast<double>(imageWidth) / imageHeight) };
-		Vec3 cameraCenter{ Vec3(0.f) };
+		
+		// Calculate unit basis vectors for our camera coordinate frame.
+		camOrthoBasisW = computeUnitVector(lookFromPoint - lookAtPoint);
+		camOrthoBasisU = computeUnitVector(computeCrossProduct(orthoCamUpV, camOrthoBasisW));
+		camOrthoBasisV = computeCrossProduct(camOrthoBasisW, camOrthoBasisU);
+
 
 		// Viewport spanning vectors, and deltas.
-		Vec3 viewportUX{ viewportWidth, 0, 0 };
-		Vec3 viewportVY{ 0, -viewportHeight, 0 };
+		Vec3 viewportUX{ viewportWidth * camOrthoBasisU };
+		Vec3 viewportVY{ viewportHeight * -camOrthoBasisV };
 		pixelDeltaUX = viewportUX / imageWidth;
 		pixelDeltaVY = viewportVY / imageHeight;
 
 		// Location of the top left pixel.
-		Vec3 viewportUpperLeftNorm = cameraCenter - Vec3(0, 0, focalLength) - (viewportUX / 2) - (viewportVY / 2);
+		Vec3 viewportUpperLeftNorm = camCenterPoint - (focusDist * camOrthoBasisW) - (viewportUX / 2) - (viewportVY / 2);
 		firstPixelLocationPoint = viewportUpperLeftNorm + (0.5f * (pixelDeltaUX + pixelDeltaVY));
+
+		double defocusRad{ focusDist * (std::tan(UDegreesToRadians(defocusAngle / 2))) };
+		defocusDiskHor = camOrthoBasisU * defocusRad;
+		defocusDiskVert = camOrthoBasisV * defocusRad;
 	}
 
 	Ray genRayFromCamToPixelCenter(int horPixel, int vertPixel) const
@@ -81,7 +122,7 @@ private:
 		Vec3 pixelCenter{firstPixelLocationPoint + (horPixel * pixelDeltaUX) + (vertPixel * pixelDeltaVY) };
 		Vec3 pixelSample{ pixelCenter + pixelSampleSquare() };
 
-		Vec3 rayOrigin{ camCenterPoint };
+		Vec3 rayOrigin{ defocusAngle <= 0 ? camCenterPoint : defocusDiskSample() };
 		Vec3 rayDirection{ pixelSample - rayOrigin };
 
 		return Ray(rayOrigin, rayDirection);
@@ -101,7 +142,7 @@ private:
 		{
 			Ray scatteredRay;
 			Vec3 attenuationValue;
-			if (hitRec.hitRecMaterial->scatterLight(inputRay, hitRec, attenuationValue, scatteredRay))
+			if (hitRec.hitRecMaterial->scatterRay(inputRay, hitRec, attenuationValue, scatteredRay))
 			{
 				return attenuationValue * computeRayColor(scatteredRay, mainWorld, rayBounces - 1);
 			}
@@ -112,7 +153,7 @@ private:
 		Vec3 unitDirectionNorm{ computeUnitVector(inputRay.getRayDirection()) };
 		double lerpFactor{ 0.5 * (unitDirectionNorm.getSecondComponent() + 1.f) };
 
-		return (((1.f - lerpFactor) * (Vec3(1.f))) + (lerpFactor * Vec3(0.5f, 0, 1.f)));
+		return (((1.f - lerpFactor) * (Vec3(1.f))) + (lerpFactor * Vec3(0.5f, 0.7f, 1.f)));
 	}
 
 	Vec3 pixelSampleSquare() const
@@ -121,6 +162,13 @@ private:
 		double pX{ -0.5f + UGenRNGDouble() };
 		double pY{ -0.5f + UGenRNGDouble() };
 		return (pX * pixelDeltaUX) + (pY * pixelDeltaVY);
+	}
+
+	Vec3 defocusDiskSample() const
+	{
+		// Return a random point in the camera defocus disk.
+		Vec3 randP{ genRandVecInUnitDisk() };
+		return camCenterPoint + (randP[0] * defocusDiskHor) + (randP[1] * defocusDiskVert);
 	}
 
 };

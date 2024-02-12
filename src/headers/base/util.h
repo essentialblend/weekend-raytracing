@@ -52,3 +52,6 @@ inline double UGenRNGDouble(double minVal, double maxVal)
 #include "../world_objects/WOSphere.h"
 #include "worldObjectList.h"
 #include "camera.h"
+#include "./headers/materials/lambertian.h"
+#include "./headers/materials/metal.h"
+#include "./headers/materials/dielectric.h"

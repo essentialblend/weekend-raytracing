@@ -158,9 +158,27 @@ inline Vec3 genRandRayOnHemisphere(const Vec3& normalVec)
 		return -vecOnUnitSphere;
 }
 
-inline Vec3 reflectRay(const Vec3& inputVec, const Vec3& normalVec)
+inline Vec3 genReflectedRay(const Vec3& inputVec, const Vec3& normalVec)
 {
 	return inputVec - (2 * computeDotProduct(inputVec, normalVec) * normalVec);
 }
 
+inline Vec3 genRefractedRay(const Vec3& inputRay, const Vec3& normalVec, double etaByetaPrime)
+{
+	double cosTheta{ std::fmin(computeDotProduct(-inputRay, normalVec), 1.f) };
+	Vec3 perpComp{ etaByetaPrime * (inputRay + (cosTheta * normalVec)) };
+	Vec3 parallelComp{-std::sqrt(std::fabs(1.f - perpComp.getLengthSquared())) * normalVec};
+	return perpComp + parallelComp;
+}
 
+inline Vec3 genRandVecInUnitDisk()
+{
+	while (true)
+	{
+		Vec3 returnVec = Vec3(UGenRNGDouble(-1, 1), UGenRNGDouble(-1, 1), 0);
+		if (returnVec.getLengthSquared() < 1)
+		{
+			return returnVec;
+		}
+	}
+}

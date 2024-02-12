@@ -4,16 +4,17 @@
 class MMetal : public Material
 {
 public:
-	MMetal(const Vec3& albedoCol) : albedoMetal(albedoCol) {}
+	MMetal(const Vec3& albedoCol, double fuzzF) : albedoMetal(albedoCol), fuzzFactor(fuzzF < 1 ? fuzzF : 1) {}
 
-	bool scatterLight(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
+	bool scatterRay(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
 	{
-		Vec3 reflectedRay = reflectRay(computeUnitVector(inputRay.getRayDirection()), hitRec.hitNormalVec);
-		scatteredRay = Ray(hitRec.hitPoint, reflectedRay);
+		Vec3 reflectedRay = genReflectedRay(computeUnitVector(inputRay.getRayDirection()), hitRec.hitNormalVec);
+		scatteredRay = Ray(hitRec.hitPoint, reflectedRay + (fuzzFactor * computeUnitVector(genRandVecInUnitSphere())));
 		attenuationVal = albedoMetal;
-		return true;
+		return (computeDotProduct(scatteredRay.getRayDirection(), hitRec.hitNormalVec) > 0);
 	}
 
 private:
 	Vec3 albedoMetal;
+	double fuzzFactor;
 };
