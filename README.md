@@ -27,7 +27,7 @@ Directory Structure
   - `src/headers/world_objects` --
     Contains all derived world-object classes.
 
-Currently Working On
+Progress
 --------------------
 - Part 1 (Now complete!)
 - Part 2 (In Progress!)
