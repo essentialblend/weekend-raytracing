@@ -3,31 +3,30 @@
 class Interval
 {
 public:
-	double minValue{ 0 };
-	double maxValue{ 0 };
+	Interval() : minRange(-Uinf), maxRange(+Uinf) {}
+	Interval(double m, double ma) : minRange(m), maxRange(ma) {}
 
-	Interval() : minValue(+Uinf), maxValue(-Uinf) {}
-	Interval(double minVal, double maxVal) : minValue(minVal), maxValue(maxVal) {}
-
-	bool isWithinBounds(double x) const
+	bool isWithinInterval(double inputV) const
 	{
-		return minValue <= x && x <= maxValue;
+		return (minRange <= inputV && inputV <= maxRange);
 	}
 
-	bool isStrictlyWithinBounds(double x) const
+	bool isStrictlyWithinInterval(double inputV) const
 	{
-		return minValue < x && x < maxValue;
+		return (minRange < inputV && inputV < maxRange);
 	}
 
-	double clampToIntervalRange(double valToClamp) const
+	double getIntervalMinRange() const
 	{
-		if (valToClamp < minValue) return minValue;
-		if (valToClamp > maxValue) return maxValue;
-		return valToClamp;
+		return minRange;
 	}
 
-	static const Interval emptyInterval, universeInterval;
+	double getIntervalMaxRange() const
+	{
+		return maxRange;
+	}
+
+private:
+	double minRange;
+	double maxRange;
 };
-
-const static Interval emptyInterval(+Uinf, -Uinf);
-const static Interval universeInterval(-Uinf, +Uinf);

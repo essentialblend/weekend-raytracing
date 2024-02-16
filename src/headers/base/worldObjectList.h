@@ -1,42 +1,36 @@
 #pragma once
-import std;
-
-#include "worldObject.h"
 
 class WorldObjectList : public WorldObject
 {
 public:
-
+	std::vector<std::shared_ptr<WorldObject>> WOList;
 
 	WorldObjectList() {}
-	WorldObjectList(std::shared_ptr<WorldObject> worldObjToAdd) { addWOToList(worldObjToAdd); }
+	WorldObjectList(std::shared_ptr<WorldObject> wObj) { addToWorld(wObj); }
 
-	void addWOToList(std::shared_ptr<WorldObject> worldObjToAdd)
+	void addToWorld(std::shared_ptr<WorldObject> wObj)
 	{
-		worldObjects.push_back(worldObjToAdd);
+		WOList.push_back(wObj);
 	}
-	void clearWObjList() 
-	{
-		worldObjects.clear();
-	}
+	void clearWorld() { WOList.clear(); };
 
-	bool rayHit(const Ray& currRay, Interval validRayInterval, HitRecord& hitRec) const override
+	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const override
 	{
 		HitRecord tempRec;
 		bool didItHit{ false };
-		double closestRootYet = validRayInterval.maxValue;
+		double closestHitPointYet = validInterval.getIntervalMaxRange();
 
-		for (const auto& object : worldObjects)
+		for (const std::shared_ptr<WorldObject>& WO : WOList)
 		{
-			if (object->rayHit(currRay, Interval(validRayInterval.minValue, closestRootYet), tempRec))
+			if (WO->checkHit(inputRay, Interval(validInterval.getIntervalMinRange(), closestHitPointYet), tempRec))
 			{
 				didItHit = true;
-				closestRootYet = tempRec.hitRoot;
+				closestHitPointYet = tempRec.hitRoot;
 				hitRec = tempRec;
 			}
 		}
+
 		return didItHit;
 	}
-private:
-	std::vector<std::shared_ptr<WorldObject>> worldObjects;
+
 };

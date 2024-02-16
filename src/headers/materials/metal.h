@@ -1,20 +1,22 @@
 #pragma once
-#include ".././base/material.h"
+
 
 class MMetal : public Material
 {
 public:
-	MMetal(const Vec3& albedoCol, double fuzzF) : albedoMetal(albedoCol), fuzzFactor(fuzzF < 1 ? fuzzF : 1) {}
+	MMetal(const ColorVec3& albedo, double fuzzFactor) : albedoValue(albedo), fuzzFactor(fuzzFactor < 1 ? fuzzFactor : 1) {}
 
-	bool scatterRay(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
+	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation) const override
 	{
-		Vec3 reflectedRay = genReflectedRay(computeUnitVector(inputRay.getRayDirection()), hitRec.hitNormalVec);
-		scatteredRay = Ray(hitRec.hitPoint, reflectedRay + (fuzzFactor * computeUnitVector(genRandVecInUnitSphere())));
-		attenuationVal = albedoMetal;
-		return (computeDotProduct(scatteredRay.getRayDirection(), hitRec.hitNormalVec) > 0);
+		Vec3 newReflRayDir = computeReflectionDirection(computeUnitVector(inputRay.getRayDirection()), hitRec.hitNormalVec);
+
+		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir + (fuzzFactor * genNormalizedRandVec3UnitSphere()));
+		colorAttenuation = albedoValue;
+		return computeDotProduct(scatteredRay.getRayDirection(), hitRec.hitNormalVec) > 0;
 	}
 
 private:
-	Vec3 albedoMetal;
+	ColorVec3 albedoValue;
 	double fuzzFactor;
+
 };

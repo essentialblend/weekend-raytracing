@@ -1,9 +1,8 @@
 #pragma once
-#include "util.h"
 
 class Material
 {
 public:
 	virtual ~Material() = default;
-	virtual bool scatterRay(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const = 0;
+	virtual bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation) const = 0;
 };

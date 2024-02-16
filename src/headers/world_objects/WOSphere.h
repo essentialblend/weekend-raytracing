@@ -1,45 +1,42 @@
 #pragma once
-#include "../base/worldObject.h"
 
 class WOSphere : public WorldObject
 {
 public:
-	WOSphere(Vec3 sphereCenter, double sphereRad, std::shared_ptr<Material> WOMaterial) : sphereCenter(sphereCenter), sphereRad(sphereRad), WOMaterial(WOMaterial) {}
+	WOSphere(PointVec3 sphC, double sphR, std::shared_ptr<Material> assignMat) : sphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat) {}
 
-	bool rayHit(const Ray& currRay, Interval validRayInterval, HitRecord& hitRec) const override
+	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const override
 	{
-		Vec3 centerToOriginDir = currRay.getRayOrigin() - sphereCenter;
+		Vec3 sphereCenterToRayOriginDir = inputRay.getRayOrigin() - sphereCenter;
+		// Quadratic coeffs: a = b . b, b = 2b . (A - C), c = (A - C) . (A - C) - r^2.
+		double a{ inputRay.getRayDirection().computeMagnitudeSquared() };
+		double half_b{ computeDotProduct(sphereCenterToRayOriginDir, inputRay.getRayDirection()) };
+		double c{ sphereCenterToRayOriginDir.computeMagnitudeSquared() - (sphereRadius * sphereRadius) };
+		double discr{ (half_b * half_b) - (a * c) };
 
-		// a, b, and c for the quadratic equation.
-		double a{ currRay.getRayDirection().getLengthSquared() };
-		double halfB{ computeDotProduct(centerToOriginDir, currRay.getRayDirection()) };
-		double c{ centerToOriginDir.getLengthSquared() - (sphereRad * sphereRad) };
-		double quadDiscr{ (halfB * halfB) - (a * c) };
+		if (discr < 0) return false;
 
-		if (quadDiscr < 0) return false;
-
-		double discrSqrRoot{ std::sqrt(quadDiscr) };
-
-		// Find nearest root in acceptable range.
-		auto minRoot{ (-halfB - discrSqrRoot) / a };
-		if (!validRayInterval.isStrictlyWithinBounds(minRoot))
+		double solutionRoot{ (-half_b - std::sqrt(discr)) / a };
+		if (!validInterval.isWithinInterval(solutionRoot))
 		{
-			minRoot = (-halfB + discrSqrRoot) / a;
-			if(!validRayInterval.isStrictlyWithinBounds(minRoot)) return false;
+			solutionRoot = (-half_b + std::sqrt(discr)) / a;
+			if (!validInterval.isWithinInterval(solutionRoot))
+			{
+				return false;
+			}
 		}
-
-		hitRec.hitRoot = minRoot;
-		hitRec.hitPoint = currRay.getPointOnRayAt(hitRec.hitRoot);
-		hitRec.hitNormalVec = (hitRec.hitPoint - sphereCenter) / sphereRad;
-
-		hitRec.setFaceNormal(currRay, hitRec.hitNormalVec);
-		hitRec.hitRecMaterial = WOMaterial;
+		hitRec.hitRoot = solutionRoot;
+		hitRec.hitPoint = inputRay.getPointOnRayAt(hitRec.hitRoot);
+		Vec3 outwardNormal = (hitRec.hitPoint - sphereCenter) / sphereRadius;
+		hitRec.setFaceNormal(inputRay, outwardNormal);
+		hitRec.hitMaterial = sphereMaterial;
 
 		return true;
-;	}
+	}
+
 
 private:
-	Vec3 sphereCenter;
-	double sphereRad;
-	std::shared_ptr<Material> WOMaterial;
+	PointVec3 sphereCenter;
+	double sphereRadius;
+	std::shared_ptr<Material> sphereMaterial;
 };

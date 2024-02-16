@@ -1,184 +1,175 @@
 #pragma once
 
-import std;
-
-class Vec3 {
+class Vec3
+{
 public:
-	double baseVec3[3];
+	Vec3() : member{ 0, 0, 0 } {}
+	Vec3(double f) : member{ f, f, f } {}
+	Vec3(double f, double s, double t) : member{ f, s, t } {}
 
-	Vec3() : baseVec3{ 0, 0, 0 } {};
-	Vec3(double first) : baseVec3{ first, first, first } {};
-	Vec3(double first, double second, double third) : baseVec3{ first, second, third } {};
+	// Member getters and operators.
+	double getX() const { return member[0]; }
+	double getY() const { return member[1]; }
+	double getZ() const { return member[2]; }
 
-	double getFirstComponent() const
-	{
-		return baseVec3[0];
-	}
-	double getSecondComponent() const
-	{
-		return baseVec3[1];
-	}
-	double getThirdComponent() const
-	{
-		return baseVec3[2];
-	}
+	Vec3 operator-() const { return Vec3(-member[0], -member[1], -member[2]); }
+	double operator[](unsigned short i) const { return member[i]; }
+	double& operator[](unsigned short i) { return member[i]; }
 
-	Vec3 operator-() const 
+	Vec3& operator+=(const Vec3& inpV)
 	{
-		return Vec3(-baseVec3[0], -baseVec3[1], -baseVec3[2]);
-	}
-	double operator[](const int i) const
-	{
-		return baseVec3[i];
-	}
-	double& operator[](const int i)
-	{
-		return baseVec3[i];
-	}
-
-	Vec3& operator+= (const Vec3& inputVec)
-	{
-		baseVec3[0] += inputVec[0];
-		baseVec3[1] += inputVec[1];
-		baseVec3[2] += inputVec[2];
-		return *this;
-	}
-	Vec3& operator*= (const double scaleFactor)
-	{
-		baseVec3[0] *= scaleFactor;
-		baseVec3[1] *= scaleFactor;
-		baseVec3[2] *= scaleFactor;
+		member[0] += inpV.getX();
+		member[1] += inpV.getY();
+		member[2] += inpV.getZ();
 		return *this;
 	}
 
-	const Vec3& operator/= (const double scaleFactor)
+	Vec3& operator*=(const Vec3& inpV)
 	{
-		return (*this *= (1 / scaleFactor));
+		member[0] *= inpV.getX();
+		member[1] *= inpV.getY();
+		member[2] *= inpV.getZ();
+		return *this;
 	}
 
-	double getLengthSquared() const
+	Vec3& operator/=(const double inpV)
 	{
-		return ((baseVec3[0] * baseVec3[0]) + (baseVec3[1] * baseVec3[1]) + (baseVec3[2] * baseVec3[2]));
+		return *this *= 1 / inpV;
 	}
 
-	double getLength() const
+	double computeMagnitude() const
 	{
-		return std::sqrt(getLengthSquared());
+		return std::sqrt(computeMagnitudeSquared());
 	}
 
-	static Vec3 genRNGVec3()
+	double computeMagnitudeSquared() const
+	{
+		return (member[0] * member[0]) + (member[1] * member[1]) + (member[2] * member[2]);
+	}
+
+	static Vec3 genRandomVec3()
 	{
 		return Vec3(UGenRNGDouble(), UGenRNGDouble(), UGenRNGDouble());
 	}
 
-	static Vec3 genRNGVec3(double minRange, double maxRange)
+	static Vec3 genRandomVec3(double minV, double maxV)
 	{
-		return Vec3(UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange), UGenRNGDouble(minRange, maxRange));
+		return Vec3(UGenRNGDouble(minV, maxV), UGenRNGDouble(minV, maxV), UGenRNGDouble(minV, maxV));
 	}
 
-	bool checkZeroScatter() const
+	bool checkNearZero() const
 	{
-		auto s = 1e-8;
-		return (std::fabs(baseVec3[0]) < s) && (std::fabs(baseVec3[1]) < s) && (std::fabs(baseVec3[2]) < s);
-
+		auto nearInf = 1e-8;
+		return((std::fabs(member[0]) < nearInf) && (std::fabs(member[1]) < nearInf) && (std::fabs(member[2]) < nearInf));
 	}
+
+private:
+	double member[3];
 };
 
-inline std::ostream& operator<<(std::ostream& outStream, const Vec3& inputVec)
+// Constants
+using PointVec3 = Vec3;
+using ColorVec3 = Vec3;
+
+// Vector utilities.
+
+inline std::ostream& operator<<(std::ostream& outStream, const Vec3& inpV)
 {
-	return outStream << inputVec.baseVec3[0] << ' ' << inputVec.baseVec3[1] << inputVec.baseVec3[2];
+	return outStream << inpV[0] << ' ' << inpV[1] << ' ' << inpV[2];
 }
 
-inline Vec3 operator+(const Vec3& firstVec, const Vec3& secondVec)
+inline Vec3 operator+(const Vec3& f, const Vec3& s)
 {
-	return Vec3(firstVec.baseVec3[0] + secondVec.baseVec3[0], firstVec.baseVec3[1] + secondVec.baseVec3[1], firstVec.baseVec3[2] + secondVec.baseVec3[2]);
+	return Vec3(f.getX() + s.getX(), f.getY() + s.getY(), f.getZ() + s.getZ());
 }
 
-inline Vec3 operator-(const Vec3& firstVec, const Vec3& secondVec)
+inline Vec3 operator-(const Vec3& f, const Vec3& s)
 {
-	return Vec3(firstVec.baseVec3[0] - secondVec.baseVec3[0], firstVec.baseVec3[1] - secondVec.baseVec3[1], firstVec.baseVec3[2] - secondVec.baseVec3[2]);
+	return Vec3(f.getX() - s.getX(), f.getY() - s.getY(), f.getZ() - s.getZ());
 }
 
-inline Vec3 operator*(const Vec3& firstVec, const Vec3& secondVec)
+inline Vec3 operator*(const Vec3& f, const Vec3& s)
 {
-	return Vec3(firstVec.baseVec3[0] * secondVec.baseVec3[0], firstVec.baseVec3[1] * secondVec.baseVec3[1], firstVec.baseVec3[2] * secondVec.baseVec3[2]);
+	return Vec3(f.getX() * s.getX(), f.getY() * s.getY(), f.getZ() * s.getZ());
 }
 
-inline Vec3 operator*(double scaleFac, const Vec3& firstVec)
+inline Vec3 operator*(const double t, const Vec3& s)
 {
-	return Vec3(scaleFac * firstVec.getFirstComponent(), scaleFac * firstVec.getSecondComponent(), scaleFac * firstVec.getThirdComponent());
+	return Vec3(t * s.getX(), t * s.getY(), t * s.getZ());
 }
 
-inline Vec3 operator*(const Vec3& firstVec, double scaleFac)
+inline Vec3 operator*(const Vec3& f, const double t)
 {
-	return scaleFac * firstVec;
+	return t * f;
 }
 
-
-inline Vec3 operator/(Vec3 firstVec, double scaleFac)
+inline Vec3 operator/(const Vec3& f, const double t)
 {
-	return (1 / scaleFac) * firstVec;
+	return (1 / t) * f;
 }
 
-inline double computeDotProduct(const Vec3& firstVec, const Vec3& secondVec)
+inline double computeDotProduct(const Vec3& f, const Vec3& s)
 {
-	return (firstVec[0] * secondVec[0]) + (firstVec[1] * secondVec[1]) + (firstVec[2] * secondVec[2]);
-};
-
-inline Vec3 computeCrossProduct(const Vec3& firstVec, const Vec3& secondVec)
-{
-	return Vec3((firstVec.baseVec3[1] * secondVec.baseVec3[2] - firstVec.baseVec3[2] * secondVec.baseVec3[1]), (firstVec.baseVec3[2] * secondVec.baseVec3[0] - firstVec.baseVec3[0] * secondVec.baseVec3[2]), (firstVec.baseVec3[0] * secondVec.baseVec3[1] - firstVec.baseVec3[1] * secondVec.baseVec3[0]));
+	return f.getX() * s.getX() + f.getY() * s.getY() + f.getZ() * s.getZ();
 }
 
-inline Vec3 computeUnitVector(const Vec3& inputVec)
+inline Vec3 computeCrossProduct(const Vec3& f, const Vec3& s)
 {
-	return inputVec / inputVec.getLength();
+	return Vec3(f.getY() * s.getZ() - f.getZ() * s.getY(), f.getZ() * s.getX() - f.getX() * s.getZ(), f.getX() * s.getY() - f.getY() * s.getX());
 }
 
-inline Vec3 genRandVecInUnitSphere()
+inline Vec3 computeUnitVector(const Vec3& f)
+{
+	return f / f.computeMagnitude();
+}
+
+inline Vec3 genRandVec3UnitSphere()
 {
 	while (true)
 	{
-		Vec3 randVec{ Vec3::genRNGVec3(-1.f, 1.f) };
-		if (randVec.getLengthSquared() < 1) 
-		{ 
-			return randVec;
-		}
+		Vec3 test = Vec3::genRandomVec3(-1, 1);
+		if (test.computeMagnitudeSquared() < 1) return test;
 	}
 }
 
-inline Vec3 genRandRayOnHemisphere(const Vec3& normalVec)
+inline Vec3 genNormalizedRandVec3UnitSphere()
 {
-	Vec3 vecOnUnitSphere = computeUnitVector(genRandVecInUnitSphere());
-	if (computeDotProduct(vecOnUnitSphere, normalVec) > 0.f)
+	return computeUnitVector(genRandVec3UnitSphere());
+}
+
+inline Vec3 genNormalizedRandVec3OnHemisphere(const Vec3& surfaceNormal)
+{
+	Vec3 randUnitSph = genNormalizedRandVec3UnitSphere();
+	if (computeDotProduct(randUnitSph, surfaceNormal) > 0.0f)
 	{
-		return vecOnUnitSphere;
+		return randUnitSph;
 	}
 	else
-		return -vecOnUnitSphere;
+		return -randUnitSph;
 }
 
-inline Vec3 genReflectedRay(const Vec3& inputVec, const Vec3& normalVec)
+inline Vec3 computeReflectionDirection(const Vec3& inputVec, const Vec3& hitNormalVec)
 {
-	return inputVec - (2 * computeDotProduct(inputVec, normalVec) * normalVec);
+	return inputVec - (2 * computeDotProduct(inputVec, hitNormalVec) * hitNormalVec);
 }
 
-inline Vec3 genRefractedRay(const Vec3& inputRay, const Vec3& normalVec, double etaByetaPrime)
+inline Vec3 computeRefractionDirection(const Vec3& inputVec, const Vec3& normalVec, double etaByEtaPrime)
 {
-	double cosTheta{ std::fmin(computeDotProduct(-inputRay, normalVec), 1.f) };
-	Vec3 perpComp{ etaByetaPrime * (inputRay + (cosTheta * normalVec)) };
-	Vec3 parallelComp{-std::sqrt(std::fabs(1.f - perpComp.getLengthSquared())) * normalVec};
-	return perpComp + parallelComp;
+	double cosineTheta{ std::fmin(computeDotProduct(-inputVec, normalVec), 1.f) };
+
+	Vec3 rOutPerp{ etaByEtaPrime * (inputVec + (cosineTheta * normalVec)) };
+	Vec3 rOutPar{ -std::sqrt(std::fabs(1.f - rOutPerp.computeMagnitudeSquared())) * normalVec };
+	return rOutPerp + rOutPar;
 }
 
-inline Vec3 genRandVecInUnitDisk()
+inline Vec3 genRandVec3UnitDisk()
 {
 	while (true)
 	{
-		Vec3 returnVec = Vec3(UGenRNGDouble(-1, 1), UGenRNGDouble(-1, 1), 0);
-		if (returnVec.getLengthSquared() < 1)
+		Vec3 resultVec(UGenRNGDouble(-1, 1), UGenRNGDouble(-1, 1), 0);
+		if (resultVec.computeMagnitudeSquared() < 1)
 		{
-			return returnVec;
+			return resultVec;
 		}
 	}
 }

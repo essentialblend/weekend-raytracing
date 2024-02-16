@@ -1,23 +1,19 @@
 #pragma once
 
-#include "ray.h"
-
 class Material;
 
 class HitRecord
 {
 public:
-	Vec3 hitPoint;
+	PointVec3 hitPoint;
 	Vec3 hitNormalVec;
-	std::shared_ptr<Material> hitRecMaterial;
-	// Scalar (t) for a + t*b.
-	double hitRoot;
-	bool frontFace;
+	double hitRoot{ 0 };
+	bool frontFace{ false };
+	std::shared_ptr<Material> hitMaterial;
 
-	void setFaceNormal(const Ray& currRay, const Vec3& outwardNormal)
+	void setFaceNormal(const Ray& inputRay, const Vec3& outwardNormal)
 	{
-		// Set the hit record normal vector. outwardNormal is expected to be normalized.
-		frontFace = computeDotProduct(currRay.getRayDirection(), outwardNormal) < 0;
+		frontFace = computeDotProduct(inputRay.getRayDirection(), outwardNormal) < 0;
 		hitNormalVec = frontFace ? outwardNormal : -outwardNormal;
 	}
 };
@@ -26,6 +22,5 @@ class WorldObject
 {
 public:
 	virtual ~WorldObject() = default;
-
-	virtual bool rayHit(const Ray& currRay, Interval validRayInterval,  HitRecord& hitRec) const = 0;
+	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const = 0;
 };

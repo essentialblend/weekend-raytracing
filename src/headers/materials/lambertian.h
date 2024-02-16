@@ -1,27 +1,21 @@
 #pragma once
 
-#include "../base/material.h"
 
 class MLambertian : public Material
 {
 public:
-	MLambertian(const Vec3& matCol) : albedoLambertian(matCol) {}
+	MLambertian(const ColorVec3& albedo) : albedoValue(albedo) {}
 
-	bool scatterRay(const Ray& inputRay, const HitRecord& hitRec, Vec3& attenuationVal, Ray& scatteredRay) const override
+	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation) const override
 	{
-		Vec3 scatteredRayDir = hitRec.hitNormalVec + computeUnitVector(genRandVecInUnitSphere());
-
-		if (scatteredRayDir.checkZeroScatter())
-		{
-			scatteredRayDir = hitRec.hitNormalVec;
-		}
-
-		scatteredRay = Ray(hitRec.hitPoint, scatteredRayDir);
-		attenuationVal = albedoLambertian;
+		Vec3 newReflRayDir{ hitRec.hitNormalVec + genNormalizedRandVec3UnitSphere() };
+		if (newReflRayDir.checkNearZero()) { newReflRayDir = hitRec.hitNormalVec; }
+		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir);
+		colorAttenuation = albedoValue;
 		return true;
 	}
-private:
-	Vec3 albedoLambertian{ 0.f };
 
+private:
+	ColorVec3 albedoValue;
 
 };
