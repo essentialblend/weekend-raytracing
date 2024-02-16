@@ -3,20 +3,25 @@ My First C++ Path Tracer
 
 A brute force path-traced renderer implemented using the [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) series by Peter Shirley and co.
 
-![image](https://github.com/essentialblend/weekend-raytracing/assets/73982939/36711d91-64f9-4ef1-b07e-52240abe6800)
-*600 x 337, 150 spp, 75 max. bounces.*
+![render](https://github.com/essentialblend/weekend-raytracing/assets/73982939/32654630-fedf-4d0e-845f-a3b850ddc585)
+*1920 x 1080, 150 spp, 150 max. bounces*
 
 Current Features:
-- Developed from scratch using C++.
-- Super-sampled Anti-aliasing.
-- Gamma Correction.
-- Positionable camera with defocus blur (DOF).
-- Lambertian, Metallic, and Dielectric Materials.
+- Developed from scratch using C++. (RTiOW-P1)
+- Per pixel multi-sampled anti-aliasing. (RTiOW-P1)
+- Gamma Correction. (RTiOW-P1)
+- Positionable camera with defocus blur (DOF). (RTiOW-P1)
+- Lambertian, Metallic, and Dielectric Materials. (RTiOW-P1)
+- Motion blur. (RTTNW-P2)
 
 Improvements:
 - Basic multi-threading.
 - Uniformly distributed per-pixel jittered AA.
-- Core implementation writes every pixel, we now collect all pixel data, and then post-render, write to the image.
+- Core implementation writes every pixel. We collect all color data and directly write to the image in one go.
+
+Branches:
+- `rtiow-book1`: Contains code from Ray Tracing in One Weekend.
+- `rttnw-book2`: Contains code from Ray Tracing The Next Week.
 
 Directory Structure
 -------------------
