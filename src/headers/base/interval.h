@@ -26,6 +26,23 @@ public:
 		return maxRange;
 	}
 
+	void setIntervalMinRange(const double value)
+	{
+		minRange = value;
+	}
+
+	void setIntervalMaxRange(const double value)
+	{
+		maxRange = value;
+	}
+
+	double getIntervalSize() const { return maxRange - minRange };
+
+	Interval expandIntervalForPadding(double deltaV) const
+	{
+		return Interval(minRange - (deltaV / 2), maxRange + (deltaV / 2));
+	}
+
 private:
 	double minRange;
 	double maxRange;

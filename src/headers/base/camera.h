@@ -62,7 +62,7 @@ public:
 
 		auto logTimeEnd = std::chrono::high_resolution_clock::now();
 
-		UPrintSuccessLog(logTimeStart, logTimeEnd, imageWidthPixels * imageHeightPixels, jitterSamplesAA, useMT, maxRayBouncesDepth);
+		UPrintSuccessLog(logTimeStart, logTimeEnd, imageWidthPixels * imageHeightPixels, jitterSamplesAA, useMT, maxRayBouncesDepth, imageWidthPixels, imageHeightPixels);
 
 	}
 

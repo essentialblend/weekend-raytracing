@@ -65,7 +65,7 @@ inline void UPrintSuccessLog(
     const std::chrono::time_point<std::chrono::steady_clock>& end,
     int totalPixels,
     int jitterAA,
-    bool useMT, int maxBounces)
+    bool useMT, int maxBounces, int resW, int resH)
 {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     auto logTotalTimeSeconds = duration.count() / 1000.0; // Convert to seconds as a floating-point.
@@ -85,9 +85,11 @@ inline void UPrintSuccessLog(
         pixelProcessDetails = "Processing speed: Calculation not possible due to short duration...";
     }
     std::string renderingModeDetails = std::format("\nRendering mode: {}", useMT ? "Multi-threaded..." : "Single-threaded...");
+    
 
     UWriteToClog(renderingModeDetails);
     UWriteToClog(timeDetails);
+    UWriteToClog(std::format("Image resolution: {} x {}...", resW, resH));
     UWriteToClog(graphicsDetails);
     UWriteToClog(pixelProcessDetails);
 }
@@ -104,6 +106,7 @@ inline void UPrintSuccessLog(
 #include "../materials/metal.h"
 #include "../materials/dielectric.h"
 #include "camera.h"
+#include "../base/aabb.h"
 
 // CONSTS
 constexpr bool USE_MT{ true };
