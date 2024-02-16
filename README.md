@@ -13,6 +13,11 @@ Current Features:
 - Positionable camera with defocus blur (DOF).
 - Lambertian, Metallic, and Dielectric Materials.
 
+Improvements:
+- Basic multi-threading.
+- Uniformly distributed per-pixel jittered AA.
+- Core implementation writes every pixel, we now collect all pixel data, and then post-render, write to the image.
+
 Directory Structure
 -------------------
   - `src/` --
