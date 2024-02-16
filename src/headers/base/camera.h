@@ -167,14 +167,9 @@ private:
 				{
 					for (int pixelX{ 0 }; pixelX < jitterSqrt; ++pixelX)
 					{
-						double offsetX{ (pixelX + UGenRNGDouble()) / jitterSqrt };
-						double offsetY{ (pixelY + UGenRNGDouble()) / jitterSqrt };
-
-						PointVec3 samplePoint{ topLeftPixelLocation + ((i + offsetX) * viewportDeltaX) + ((j + offsetY) * viewportDeltaY) };
-						Vec3 rayOrigin = (defocusAngle <= 0) ? cameraCenter : defocusDiskSample();
-						Vec3 rayDirection = samplePoint - rayOrigin;
-						Ray primaryRay(rayOrigin, rayDirection);
-						pixelColor += computePixelColor(primaryRay, maxRayBouncesDepth, mainWorld);
+						Ray generatedRay{ generateRay(pixelX, pixelY, i, j) };
+						
+						pixelColor += computePixelColor(generatedRay, maxRayBouncesDepth, mainWorld);
 					}
 				}
 				pixelColor /= jitterSamplesAA;
@@ -228,6 +223,21 @@ private:
 	{
 		Vec3 randV{ genRandVec3UnitDisk() };
 		return cameraCenter + (randV[0] * defocusDiskUX) + (randV[1] * defocusDiskVY);
+	}
+
+	Ray generateRay(int pixelX, int pixelY, int i, int j) const
+	{
+		double offsetX{ (pixelX + UGenRNGDouble()) / jitterSqrt };
+		double offsetY{ (pixelY + UGenRNGDouble()) / jitterSqrt };
+
+		PointVec3 samplePoint{ topLeftPixelLocation + ((i + offsetX) * viewportDeltaX) + ((j + offsetY) * viewportDeltaY) };
+		Vec3 rayOrigin = (defocusAngle <= 0) ? cameraCenter : defocusDiskSample();
+		Vec3 rayDirection = samplePoint - rayOrigin;
+
+		// Motion blur.
+		double rayTime{ UGenRNGDouble() };
+
+		return Ray(rayOrigin, rayDirection, rayTime);
 	}
 };
 

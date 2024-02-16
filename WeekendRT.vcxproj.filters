@@ -32,7 +32,7 @@
     <ClInclude Include="src\headers\base\worldObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\headers\world_objects\WOSphere.h">
+    <ClInclude Include="src\headers\world_objects\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\headers\base\worldObjectList.h">

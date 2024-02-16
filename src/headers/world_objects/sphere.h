@@ -3,11 +3,20 @@
 class WOSphere : public WorldObject
 {
 public:
-	WOSphere(PointVec3 sphC, double sphR, std::shared_ptr<Material> assignMat) : sphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat) {}
+	// Stationary sphere.
+	WOSphere(PointVec3 sphC, double sphR, std::shared_ptr<Material> assignMat) : initialSphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat), isMoving(false) {}
+
+	// Moving sphere.
+	WOSphere(PointVec3 sphC, PointVec3 finalC, double sphR, std::shared_ptr<Material> assignMat) : initialSphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat), isMoving(true) 
+	{
+		centerVec = finalC - initialSphereCenter;
+	}
+
 
 	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const override
 	{
-		Vec3 sphereCenterToRayOriginDir = inputRay.getRayOrigin() - sphereCenter;
+		// Alter sphereCenter based on the ray's time.
+		Vec3 sphereCenterToRayOriginDir = inputRay.getRayOrigin() - (isMoving ? moveSphere(inputRay.getRayTime()) : initialSphereCenter);
 		// Quadratic coeffs: a = b . b, b = 2b . (A - C), c = (A - C) . (A - C) - r^2.
 		double a{ inputRay.getRayDirection().computeMagnitudeSquared() };
 		double half_b{ computeDotProduct(sphereCenterToRayOriginDir, inputRay.getRayDirection()) };
@@ -27,7 +36,7 @@ public:
 		}
 		hitRec.hitRoot = solutionRoot;
 		hitRec.hitPoint = inputRay.getPointOnRayAt(hitRec.hitRoot);
-		Vec3 outwardNormal = (hitRec.hitPoint - sphereCenter) / sphereRadius;
+		Vec3 outwardNormal = (hitRec.hitPoint - initialSphereCenter) / sphereRadius;
 		hitRec.setFaceNormal(inputRay, outwardNormal);
 		hitRec.hitMaterial = sphereMaterial;
 
@@ -36,7 +45,14 @@ public:
 
 
 private:
-	PointVec3 sphereCenter;
+	PointVec3 initialSphereCenter;
+	Vec3 centerVec;
 	double sphereRadius;
 	std::shared_ptr<Material> sphereMaterial;
+	bool isMoving;
+
+	PointVec3 moveSphere(double currTime) const
+	{
+		return (initialSphereCenter + (currTime * centerVec));
+	}
 };

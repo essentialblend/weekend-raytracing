@@ -10,7 +10,7 @@ public:
 	{
 		Vec3 newReflRayDir{ hitRec.hitNormalVec + genNormalizedRandVec3UnitSphere() };
 		if (newReflRayDir.checkNearZero()) { newReflRayDir = hitRec.hitNormalVec; }
-		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir);
+		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir, inputRay.getRayTime());
 		colorAttenuation = albedoValue;
 		return true;
 	}

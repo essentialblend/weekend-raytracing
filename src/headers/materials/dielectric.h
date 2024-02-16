@@ -19,11 +19,11 @@ public:
 
 		if (cannotRefract || computeSchlicksApproxForReflectance(cosineTheta, refractionRatio) > UGenRNGDouble())
 		{
-			scatteredRay = Ray(hitRec.hitPoint, computeReflectionDirection(unitDirectionVec, hitRec.hitNormalVec));
+			scatteredRay = Ray(hitRec.hitPoint, computeReflectionDirection(unitDirectionVec, hitRec.hitNormalVec), inputRay.getRayTime());
 		}
 		else
 		{
-			scatteredRay = Ray(hitRec.hitPoint, computeRefractionDirection(unitDirectionVec, hitRec.hitNormalVec, refractionRatio));
+			scatteredRay = Ray(hitRec.hitPoint, computeRefractionDirection(unitDirectionVec, hitRec.hitNormalVec, refractionRatio), inputRay.getRayTime());
 		}
 
 		return true;

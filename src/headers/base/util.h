@@ -98,7 +98,7 @@ inline void UPrintSuccessLog(
 #include "ray.h"
 #include "worldObject.h"
 #include "worldObjectList.h"
-#include "../world_objects/WOSphere.h"
+#include "../world_objects/sphere.h"
 #include "material.h"
 #include "../materials/lambertian.h"
 #include "../materials/metal.h"
@@ -107,11 +107,11 @@ inline void UPrintSuccessLog(
 
 // CONSTS
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 10 };
-constexpr int MAX_RAY_BOUNCES{ 10 };
-constexpr double VERTICAL_FOV{ 20 };
-constexpr int RES_WIDTH_PIXELS{ 400 };
-constexpr double CAM_DEFOCUS_ANGLE{ 0.6 };
+constexpr int AA_NUM_SAMPLES{ 150 };
+constexpr int MAX_RAY_BOUNCES{ 150 };
+constexpr double VERTICAL_FOV{ 25 };
+constexpr int RES_WIDTH_PIXELS{ 1920 };
+constexpr double CAM_DEFOCUS_ANGLE{ 0.2 };
 constexpr double CAM_FOCUS_DIST{ 10 };
 
 const Vec3 CAM_LOOKFROM_VEC(13, 2, 3);

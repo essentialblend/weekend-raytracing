@@ -29,7 +29,10 @@ int main()
 				{
 					Vec3 baseColor{ Vec3::genRandomVec3() * Vec3::genRandomVec3() };
 					sphereMat = std::make_shared<MLambertian>(baseColor);
-					primaryWOL.addToWorld(std::make_shared<WOSphere>(sphereCenter, 0.2f, sphereMat));
+
+					Vec3 finalCenter = sphereCenter + Vec3(0, UGenRNGDouble(0, 0.5f), 0);
+
+					primaryWOL.addToWorld(std::make_shared<WOSphere>(sphereCenter, finalCenter, 0.2f, sphereMat));
 				}
 				// Metal
 				else if (chooseMat < 0.95)

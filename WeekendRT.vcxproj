@@ -150,7 +150,7 @@
     <ClInclude Include="src\headers\materials\dielectric.h" />
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
-    <ClInclude Include="src\headers\world_objects\WOSphere.h" />
+    <ClInclude Include="src\headers\world_objects\sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

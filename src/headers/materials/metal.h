@@ -10,7 +10,7 @@ public:
 	{
 		Vec3 newReflRayDir = computeReflectionDirection(computeUnitVector(inputRay.getRayDirection()), hitRec.hitNormalVec);
 
-		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir + (fuzzFactor * genNormalizedRandVec3UnitSphere()));
+		scatteredRay = Ray(hitRec.hitPoint, newReflRayDir + (fuzzFactor * genNormalizedRandVec3UnitSphere()), inputRay.getRayTime());
 		colorAttenuation = albedoValue;
 		return computeDotProduct(scatteredRay.getRayDirection(), hitRec.hitNormalVec) > 0;
 	}
