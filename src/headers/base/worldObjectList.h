@@ -11,8 +11,11 @@ public:
 	void addToWorld(std::shared_ptr<WorldObject> wObj)
 	{
 		WOList.push_back(wObj);
+		boundingBox = AABB(boundingBox, wObj->getWOBoundingBox());
 	}
 	void clearWorld() { WOList.clear(); };
+
+	AABB getWOBoundingBox() const override { return boundingBox; }
 
 	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const override
 	{
@@ -33,4 +36,7 @@ public:
 		return didItHit;
 	}
 
+
+private:
+	AABB boundingBox;
 };

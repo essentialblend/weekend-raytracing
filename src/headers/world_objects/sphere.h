@@ -1,17 +1,29 @@
 #pragma once
 
+#include "../base/aabb.h"
+
 class WOSphere : public WorldObject
 {
 public:
 	// Stationary sphere.
-	WOSphere(PointVec3 sphC, double sphR, std::shared_ptr<Material> assignMat) : initialSphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat), isMoving(false) {}
+	WOSphere(PointVec3 sphC, double sphR, std::shared_ptr<Material> assignMat) : initialSphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat), isMoving(false) 
+	{
+		Vec3 sphereRad{ Vec3(sphereRadius, sphereRadius, sphereRadius) };
+		boundingBox = AABB(initialSphereCenter - sphereRad, initialSphereCenter + sphereRad);
+
+	}
 
 	// Moving sphere.
 	WOSphere(PointVec3 sphC, PointVec3 finalC, double sphR, std::shared_ptr<Material> assignMat) : initialSphereCenter(sphC), sphereRadius(sphR), sphereMaterial(assignMat), isMoving(true) 
 	{
+		Vec3 sphereRad{ Vec3(sphereRadius, sphereRadius, sphereRadius) };
+		AABB initBB(initialSphereCenter - sphereRad, initialSphereCenter + sphereRad);
+		AABB finalBB(finalC - sphereRad, finalC + sphereRad);
+
 		centerVec = finalC - initialSphereCenter;
 	}
 
+	AABB getWOBoundingBox() const override { return boundingBox; }
 
 	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const override
 	{
@@ -50,6 +62,7 @@ private:
 	double sphereRadius;
 	std::shared_ptr<Material> sphereMaterial;
 	bool isMoving;
+	AABB boundingBox;
 
 	PointVec3 moveSphere(double currTime) const
 	{

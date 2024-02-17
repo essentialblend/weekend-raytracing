@@ -3,47 +3,52 @@
 class Interval
 {
 public:
-	Interval() : minRange(-Uinf), maxRange(+Uinf) {}
-	Interval(double m, double ma) : minRange(m), maxRange(ma) {}
+	Interval() : minBound(-Uinf), maxBound(+Uinf) {}
+	Interval(double m, double ma) : minBound(m), maxBound(ma) {}
+	Interval(const Interval& first, const Interval& second)
+	{
+		minBound = std::fmin(first.getIntervalMinRange(), second.getIntervalMinRange());
+		maxBound = std::fmax(first.getIntervalMaxRange(), second.getIntervalMaxRange());
+	}
 
 	bool isWithinInterval(double inputV) const
 	{
-		return (minRange <= inputV && inputV <= maxRange);
+		return (minBound <= inputV && inputV <= maxBound);
 	}
 
 	bool isStrictlyWithinInterval(double inputV) const
 	{
-		return (minRange < inputV && inputV < maxRange);
+		return (minBound < inputV && inputV < maxBound);
 	}
 
 	double getIntervalMinRange() const
 	{
-		return minRange;
+		return minBound;
 	}
 
 	double getIntervalMaxRange() const
 	{
-		return maxRange;
+		return maxBound;
 	}
 
 	void setIntervalMinRange(const double value)
 	{
-		minRange = value;
+		minBound = value;
 	}
 
 	void setIntervalMaxRange(const double value)
 	{
-		maxRange = value;
+		maxBound = value;
 	}
 
-	double getIntervalSize() const { return maxRange - minRange };
+	double getIntervalSize() const { return maxBound - minBound; }
 
 	Interval expandIntervalForPadding(double deltaV) const
 	{
-		return Interval(minRange - (deltaV / 2), maxRange + (deltaV / 2));
+		return Interval(minBound - (deltaV / 2), maxBound + (deltaV / 2));
 	}
 
 private:
-	double minRange;
-	double maxRange;
+	double minBound;
+	double maxBound;
 };

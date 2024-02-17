@@ -13,8 +13,8 @@ public:
 	double getZ() const { return member[2]; }
 
 	Vec3 operator-() const { return Vec3(-member[0], -member[1], -member[2]); }
-	double operator[](unsigned short i) const { return member[i]; }
-	double& operator[](unsigned short i) { return member[i]; }
+	double operator[](int i) const { return member[i]; }
+	double& operator[](int i) { return member[i]; }
 
 	Vec3& operator+=(const Vec3& inpV)
 	{

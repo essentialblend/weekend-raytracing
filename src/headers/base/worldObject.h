@@ -1,5 +1,7 @@
 #pragma once
 
+#include "aabb.h"
+
 class Material;
 
 class HitRecord
@@ -23,4 +25,5 @@ class WorldObject
 public:
 	virtual ~WorldObject() = default;
 	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const = 0;
+	virtual AABB getWOBoundingBox() const = 0;
 };
