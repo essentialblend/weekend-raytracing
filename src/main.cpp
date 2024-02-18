@@ -1,6 +1,18 @@
 #include "./headers/base/util.h"
+#include "main.h"
 
 int main()
+{
+	switch (1)
+	{
+	case 1: render_RTIOW(); break;
+	case 2: render_RTIOW(); break;
+	}
+
+	return 0;
+}
+
+static void render_RTIOW()
 {
 	// Engine init.
 	std::vector<ColorVec3> pixelBuffer;
@@ -71,7 +83,5 @@ int main()
 	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
 
 	mainCamera.renderFrame(primaryWOL);
-
-	return 0;
 }
 
