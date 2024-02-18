@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -120,7 +120,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -138,10 +138,12 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\dep\stb_image.h" />
     <ClInclude Include="src\headers\base\aabb.h" />
     <ClInclude Include="src\headers\base\bvh_node.h" />
     <ClInclude Include="src\headers\base\camera.h" />
     <ClInclude Include="src\headers\base\color.h" />
+    <ClInclude Include="src\headers\base\image_helper_stb.h" />
     <ClInclude Include="src\headers\base\material.h" />
     <ClInclude Include="src\headers\base\ray.h" />
     <ClInclude Include="src\headers\base\interval.h" />
@@ -154,8 +156,8 @@
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
     <ClInclude Include="src\headers\textures\checkers.h" />
+    <ClInclude Include="src\headers\textures\image.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
-    <ClInclude Include="src\main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

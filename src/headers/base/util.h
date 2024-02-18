@@ -12,6 +12,7 @@
 
 const double Uinf = std::numeric_limits<double>::infinity();
 const double Upi = std::numbers::pi;
+thread_local std::mt19937 rngEng(std::random_device{}());
 
 // Utility functions.
 
@@ -30,8 +31,8 @@ inline double URadiansToDegrees(double radValue)
 inline double UGenRNGDouble()
 {
     // Use high res clock as a seed.
-    auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
-    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));
+    /*auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
+    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));*/
 
     // Define the dist. range [0.f, 1.f).
     std::uniform_real_distribution<double> uniDist(0.f, 1.f);
@@ -42,8 +43,8 @@ inline double UGenRNGDouble()
 inline double UGenRNGDouble(double minVal, double maxVal)
 {
     // Use high res clock as a seed.
-    auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
-    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));
+   /* auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
+    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));*/
 
     // Define the dist. range [0.f, 1.f).
     std::uniform_real_distribution<double> uniDist(minVal, maxVal);
@@ -116,17 +117,22 @@ inline void UPrintSuccessLog(
 #include "camera.h"
 #include "../base/aabb.h"
 #include "../base/bvh_node.h"
+#include "image_helper_stb.h"
+#include "../textures/image.h"
 
 
 // CONSTS
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 50 };
-constexpr int MAX_RAY_BOUNCES{ 25 };
-constexpr double VERTICAL_FOV{ 25 };
-constexpr int RES_WIDTH_PIXELS{ 400 };
-constexpr double CAM_DEFOCUS_ANGLE{ 0.2 };
-constexpr double CAM_FOCUS_DIST{ 10 };
+constexpr int AA_NUM_SAMPLES{ 250 };
+constexpr int MAX_RAY_BOUNCES{ 250 };
+constexpr double VERTICAL_FOV{ 20 };
+constexpr int RES_WIDTH_PIXELS{ 1920 };
+constexpr double CAM_DEFOCUS_ANGLE{ 0 };
+constexpr double CAM_FOCUS_DIST{ 12 };
 
-const Vec3 CAM_LOOKFROM_VEC(13, 2, 3);
+const Vec3 CAM_LOOKFROM_VEC(0, 0, 12);
 const Vec3 CAM_LOOKAT_VEC(0, 0, 0);
 const Vec3 WORLD_UP(0, 1, 0);
+
+static void render_RTIOW();
+static void render_earth_RTTNW();

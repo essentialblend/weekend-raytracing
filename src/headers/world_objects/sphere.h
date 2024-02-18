@@ -50,6 +50,7 @@ public:
 		hitRec.hitPoint = inputRay.getPointOnRayAt(hitRec.hitRoot);
 		Vec3 outwardNormal = (hitRec.hitPoint - initialSphereCenter) / sphereRadius;
 		hitRec.setFaceNormal(inputRay, outwardNormal);
+		getSphereUV(outwardNormal, hitRec.hitTexU, hitRec.hitTexV);
 		hitRec.hitMaterial = sphereMaterial;
 
 		return true;
@@ -67,5 +68,14 @@ private:
 	PointVec3 moveSphere(double currTime) const
 	{
 		return (initialSphereCenter + (currTime * centerVec));
+	}
+
+	static void getSphereUV(const PointVec3& currPoint, double& u, double& v)
+	{
+		double theta = std::acos(-currPoint.getY());
+		double phi = std::atan2(-currPoint.getZ(), currPoint.getX()) + Upi;
+
+		u = phi / (2 * Upi);
+		v = theta / Upi;
 	}
 };

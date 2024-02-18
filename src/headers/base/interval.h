@@ -43,6 +43,13 @@ public:
 
 	double getIntervalSize() const { return maxBound - minBound; }
 
+	double clampWithinInterval(double x) const
+	{
+		if (x < minBound) return minBound;
+		if (x > maxBound) return maxBound;
+		return x;
+	}
+
 	Interval expandIntervalForPadding(double deltaV) const
 	{
 		return Interval(minBound - (deltaV / 2), maxBound + (deltaV / 2));

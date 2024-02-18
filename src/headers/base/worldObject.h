@@ -10,8 +10,8 @@ public:
 	PointVec3 hitPoint;
 	Vec3 hitNormalVec;
 	double hitRoot{ 0 };
-	double hitTexU;
-	double hitTexV;
+	double hitTexU{ 0 };
+	double hitTexV{ 0 };
 	bool frontFace{ false };
 	std::shared_ptr<Material> hitMaterial;
 
