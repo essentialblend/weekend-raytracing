@@ -12,9 +12,12 @@ Current Features:
 - Gamma Correction. (RTiOW-P1)
 - Positionable camera with defocus blur (DOF). (RTiOW-P1)
 - Lambertian, Metallic, and Dielectric Materials. (RTiOW-P1)
+  
 - Motion blur. (RTTNW-P2)
 - AABB BVH. (RTTNW-P2)
-
+- Textures. (RTTNW-P2)
+- Perlin noise. (RTTNW-P2)
+  
 Improvements:
 - Basic multi-threading.
 - Uniformly distributed per-pixel jittered AA.
