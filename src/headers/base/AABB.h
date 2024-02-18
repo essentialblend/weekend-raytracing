@@ -53,8 +53,8 @@ public:
 			double inverseDir{ 1 / inputRay.getRayDirection()[a] };
 			double coordRayOrigin{ inputRay.getRayOrigin()[a] };
 
-			double t0{ (getAABBCoordAxisInterval(a).getIntervalMinRange() - coordRayOrigin) * inverseDir };
-			double t1{ (getAABBCoordAxisInterval(a).getIntervalMaxRange() - coordRayOrigin) * inverseDir };
+			auto t0{ (getAABBCoordAxisInterval(a).getIntervalMinRange() - coordRayOrigin) * inverseDir };
+			auto t1{ (getAABBCoordAxisInterval(a).getIntervalMaxRange() - coordRayOrigin) * inverseDir };
 
 			if (inverseDir < 0)
 			{
@@ -73,8 +73,7 @@ public:
 			{
 				return false;
 			}
-
-			return true;
 		}
+		return true;
 	}
 };

@@ -61,6 +61,8 @@ int main()
 	std::shared_ptr<Material> mat3 = std::make_shared<MMetal>(Vec3(0.7f, 0.6f, 0.5f), 0.f);
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(4, 1, 0), 1.f, mat3));
 
+	primaryWOL = WorldObjectList(std::make_shared<WOBVHNode>(primaryWOL));
+
 	// Camera init.
 	Vec3 lookF(-2, 2, 1);
 	Vec3 lookAt(0, 0, -1);

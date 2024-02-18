@@ -8,6 +8,7 @@
 #include <random>
 #include <thread>
 #include <format>
+#include <functional>
 
 const double Uinf = std::numeric_limits<double>::infinity();
 const double Upi = std::numbers::pi;
@@ -48,6 +49,11 @@ inline double UGenRNGDouble(double minVal, double maxVal)
     std::uniform_real_distribution<double> uniDist(minVal, maxVal);
 
     return uniDist(rngEng);
+}
+
+inline int UGenRNGInt(int minVal, int maxVal)
+{
+    return static_cast<int>(UGenRNGDouble(minVal, maxVal + 1));
 }
 
 inline void UWriteToClog(const std::string& outString)
@@ -107,13 +113,14 @@ inline void UPrintSuccessLog(
 #include "../materials/dielectric.h"
 #include "camera.h"
 #include "../base/aabb.h"
+#include "../base/bvh_node.h"
 
 // CONSTS
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 150 };
-constexpr int MAX_RAY_BOUNCES{ 150 };
+constexpr int AA_NUM_SAMPLES{ 50 };
+constexpr int MAX_RAY_BOUNCES{ 25 };
 constexpr double VERTICAL_FOV{ 25 };
-constexpr int RES_WIDTH_PIXELS{ 1920 };
+constexpr int RES_WIDTH_PIXELS{ 400 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0.2 };
 constexpr double CAM_FOCUS_DIST{ 10 };
 
