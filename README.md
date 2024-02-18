@@ -13,6 +13,7 @@ Current Features:
 - Positionable camera with defocus blur (DOF). (RTiOW-P1)
 - Lambertian, Metallic, and Dielectric Materials. (RTiOW-P1)
 - Motion blur. (RTTNW-P2)
+- AABB BVH. (RTTNW-P2)
 
 Improvements:
 - Basic multi-threading.
