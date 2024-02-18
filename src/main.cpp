@@ -9,8 +9,9 @@ int main()
 	WorldObjectList primaryWOL;
 
 	// Ground sphere.
-	std::shared_ptr<MLambertian> groundMat = std::make_shared<MLambertian>(Vec3(0.5, 0.5, 0.5));
-	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(0, -1000, 0), 1000, groundMat));
+	//std::shared_ptr<MLambertian> groundMat = std::make_shared<MLambertian>(Vec3(0.5, 0.5, 0.5));
+	auto texCheckers = std::make_shared<TCheckers>(0.32, ColorVec3(.2, .3, .1), ColorVec3(.9, .9, .9));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(0, -1000, 0), 1000, std::make_shared<MLambertian>(texCheckers)));
 
 	// All other world objects.
 	for (int a{ -11 }; a < 11; a++)
@@ -53,13 +54,13 @@ int main()
 	}
 
 	std::shared_ptr<Material> mat1 = std::make_shared<MDielectric>(1.5f);
-	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(0, 1, 0), 1.f, mat1));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(-2, 1, 0), 1.f, mat1));
 
 	std::shared_ptr<Material> mat2 = std::make_shared<MLambertian>(Vec3(0.4f, 0.2f, 0.1f));
-	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(-4, 1, 0), 1.f, mat2));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(4, 1, 0), 1.f, mat2));
 
 	std::shared_ptr<Material> mat3 = std::make_shared<MMetal>(Vec3(0.7f, 0.6f, 0.5f), 0.f);
-	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(4, 1, 0), 1.f, mat3));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(Vec3(7, 1, 0), 1.f, mat3));
 
 	primaryWOL = WorldObjectList(std::make_shared<WOBVHNode>(primaryWOL));
 

@@ -6,6 +6,7 @@ public:
 	std::vector<std::shared_ptr<WorldObject>> WOList;
 
 	WorldObjectList() {}
+
 	WorldObjectList(std::shared_ptr<WorldObject> wObj) { addToWorld(wObj); }
 
 	void addToWorld(std::shared_ptr<WorldObject> wObj)

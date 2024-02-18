@@ -107,6 +107,8 @@ inline void UPrintSuccessLog(
 #include "worldObject.h"
 #include "worldObjectList.h"
 #include "../world_objects/sphere.h"
+#include "../base/texture.h"
+#include "../textures/checkers.h"
 #include "material.h"
 #include "../materials/lambertian.h"
 #include "../materials/metal.h"
@@ -114,6 +116,7 @@ inline void UPrintSuccessLog(
 #include "camera.h"
 #include "../base/aabb.h"
 #include "../base/bvh_node.h"
+
 
 // CONSTS
 constexpr bool USE_MT{ true };

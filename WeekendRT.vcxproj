@@ -145,6 +145,7 @@
     <ClInclude Include="src\headers\base\material.h" />
     <ClInclude Include="src\headers\base\ray.h" />
     <ClInclude Include="src\headers\base\interval.h" />
+    <ClInclude Include="src\headers\base\texture.h" />
     <ClInclude Include="src\headers\base\util.h" />
     <ClInclude Include="src\headers\base\vec3.h" />
     <ClInclude Include="src\headers\base\worldObject.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="src\headers\materials\dielectric.h" />
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
+    <ClInclude Include="src\headers\textures\checkers.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
