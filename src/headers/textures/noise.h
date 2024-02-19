@@ -7,7 +7,9 @@ public:
     TNoise(double scaleF) : noiseScaleFac(scaleF) {}
 
     ColorVec3 getTexColorAtCoords(double u, double v, const PointVec3& p) const override {
-        return ColorVec3(1) * 0.5f * (1.f + perlinNoise.genNoise(noiseScaleFac * p));
+        PointVec3 s = noiseScaleFac * p;
+        //return ColorVec3(1) * 0.5f * (1.f + perlinNoise.genNoise(s));
+        return ColorVec3(1.f) * 0.5f * (1 + std::sin(s.getZ() + 10 * perlinNoise.genTurbulence(s)));
     }
 
 private:
