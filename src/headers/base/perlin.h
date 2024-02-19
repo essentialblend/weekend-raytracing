@@ -23,11 +23,33 @@ public:
 
     double genNoise(const PointVec3& p) const
     {
-        int i = static_cast<int>(4 * p.getX()) & 255;
-        int j = static_cast<int>(4 * p.getY()) & 255;
-        int k = static_cast<int>(4 * p.getZ()) & 255;
+        double u = p.getX() - std::floor(p.getX());
+        double v = p.getY() - std::floor(p.getY());
+        double w = p.getZ() - std::floor(p.getZ());
 
-        return randomFloat[permXArr[i] ^ permYArr[j] ^ permZArr[k]];
+        // Hermitian Smoothing.
+        u = u * u * (3 - (2 * u));
+        v = v * v * (3 - (2 * v));
+        w = w * w * (3 - (2 * w));
+
+        int i = static_cast<int>(std::floor(p.getX()));
+        int j = static_cast<int>(std::floor(p.getY()));
+        int k = static_cast<int>(std::floor(p.getZ()));
+
+        double c[2][2][2];
+
+        for (int di{ 0 }; di < 2; di++)
+        {
+            for (int dj{ 0 }; dj < 2; dj++)
+            {
+                for (int dk{ 0 }; dk < 2; dk++)
+                {
+                    c[di][dj][dk] = randomFloat[permXArr[(i + di) & 255] ^ permYArr[(j + dj) & 255] ^ permZArr[(k + dk) & 255]];
+                }
+            }
+        }
+
+        return genTrilinearInterpolation(c, u, v, w);
     }
 
 private:
@@ -59,5 +81,23 @@ private:
             intArrToShuffle[i] = intArrToShuffle[target];
             intArrToShuffle[target] = temp;
         }
+    }
+
+    static double genTrilinearInterpolation(double c[2][2][2], double u, double v, double w)
+    {
+        float accum = 0.f;
+
+        for (int i{ 0 }; i < 2; i++)
+        {
+            for (int j{ 0 }; j < 2; j++)
+            {
+                for (int k{ 0 }; k < 2; k++)
+                {
+                    accum += (((i * u) + (1 - i) * (1 - u)) * ((j * v) + (1 - j) * (1 - v)) * ((k * w) + (1 - k) * (1 - w)) * c[i][j][k]);
+                }
+            }
+        }
+
+        return accum;
     }
 };
