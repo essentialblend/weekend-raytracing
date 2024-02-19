@@ -150,7 +150,7 @@ private:
 
 		Vec3 unitDirection = computeUnitVector(inputRay.getRayDirection());
 		double lerpFactor = 0.5 * (unitDirection.getY() + 1.f);
-		return ((1 - lerpFactor) * ColorVec3(0.4f)) + (lerpFactor * ColorVec3(0.5f, 0.7f, 0.5f));
+		return ((1 - lerpFactor) * ColorVec3(1.f)) + (lerpFactor * ColorVec3(0.5f, 0.7f, 1.f));
 	}
 
 	// Render chunks if MT, else treat it as a typical render function for the entire screen for ST.

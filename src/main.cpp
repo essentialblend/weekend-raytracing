@@ -2,10 +2,11 @@
 
 int main()
 {
-	switch (2)
+	switch (3)
 	{
 	case 1: render_RTIOW(); break;
 	case 2: render_earth_RTTNW(); break;
+	case 3: render_perlin_RTTNW(); break;
 	}
 
 	return 0;
@@ -100,4 +101,25 @@ static void render_earth_RTTNW()
 	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
 
 	mainCamera.renderFrame(WorldObjectList(globeEarth));
+}
+
+static void render_perlin_RTTNW()
+{
+	// Engine init.
+	std::vector<ColorVec3> pixelBuffer;
+
+	// World
+	WorldObjectList primaryWOL;
+
+	std::shared_ptr<TNoise> perlinNoiseTex = std::make_shared<TNoise>();
+
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, -1000, 0), 1000, std::make_shared<MLambertian>(perlinNoiseTex)));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, 2, 0), 2, std::make_shared<MLambertian>(perlinNoiseTex)));
+
+
+
+	// Camera init.
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+
+	mainCamera.renderFrame(primaryWOL);
 }

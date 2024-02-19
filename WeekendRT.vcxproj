@@ -145,6 +145,7 @@
     <ClInclude Include="src\headers\base\color.h" />
     <ClInclude Include="src\headers\base\image_helper_stb.h" />
     <ClInclude Include="src\headers\base\material.h" />
+    <ClInclude Include="src\headers\base\perlin.h" />
     <ClInclude Include="src\headers\base\ray.h" />
     <ClInclude Include="src\headers\base\interval.h" />
     <ClInclude Include="src\headers\base\texture.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="src\headers\materials\metal.h" />
     <ClInclude Include="src\headers\textures\checkers.h" />
     <ClInclude Include="src\headers\textures\image.h" />
+    <ClInclude Include="src\headers\textures\noise.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

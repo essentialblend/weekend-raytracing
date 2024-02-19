@@ -105,6 +105,7 @@ inline void UPrintSuccessLog(
 #include "interval.h"
 #include "vec3.h"
 #include "ray.h"
+#include "../base/perlin.h"
 #include "worldObject.h"
 #include "worldObjectList.h"
 #include "../world_objects/sphere.h"
@@ -119,20 +120,22 @@ inline void UPrintSuccessLog(
 #include "../base/bvh_node.h"
 #include "image_helper_stb.h"
 #include "../textures/image.h"
+#include "../textures/noise.h"
 
 
 // CONSTS
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 250 };
-constexpr int MAX_RAY_BOUNCES{ 250 };
+constexpr int AA_NUM_SAMPLES{ 50 };
+constexpr int MAX_RAY_BOUNCES{ 50 };
 constexpr double VERTICAL_FOV{ 20 };
-constexpr int RES_WIDTH_PIXELS{ 1920 };
+constexpr int RES_WIDTH_PIXELS{ 600 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0 };
 constexpr double CAM_FOCUS_DIST{ 12 };
 
-const Vec3 CAM_LOOKFROM_VEC(0, 0, 12);
+const Vec3 CAM_LOOKFROM_VEC(13, 2, 3);
 const Vec3 CAM_LOOKAT_VEC(0, 0, 0);
 const Vec3 WORLD_UP(0, 1, 0);
 
 static void render_RTIOW();
 static void render_earth_RTTNW();
+static void render_perlin_RTTNW();
