@@ -111,7 +111,7 @@ static void render_perlin_RTTNW()
 	// World
 	WorldObjectList primaryWOL;
 
-	std::shared_ptr<TNoise> perlinNoiseTex = std::make_shared<TNoise>();
+	std::shared_ptr<TNoise> perlinNoiseTex = std::make_shared<TNoise>(4);
 
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, -1000, 0), 1000, std::make_shared<MLambertian>(perlinNoiseTex)));
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, 2, 0), 2, std::make_shared<MLambertian>(perlinNoiseTex)));
