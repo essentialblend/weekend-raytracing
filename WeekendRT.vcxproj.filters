@@ -86,5 +86,8 @@
     <ClInclude Include="src\headers\textures\noise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\world_objects\quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

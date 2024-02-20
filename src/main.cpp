@@ -2,11 +2,12 @@
 
 int main()
 {
-	switch (3)
+	switch (4)
 	{
 	case 1: render_RTIOW(); break;
 	case 2: render_earth_RTTNW(); break;
 	case 3: render_perlin_RTTNW(); break;
+	case 4: render_prelimQuads_RTTNW(); break;
 	}
 
 	return 0;
@@ -115,6 +116,36 @@ static void render_perlin_RTTNW()
 
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, -1000, 0), 1000, std::make_shared<MLambertian>(perlinNoiseTex)));
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, 2, 0), 2, std::make_shared<MLambertian>(perlinNoiseTex)));
+
+
+
+	// Camera init.
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+
+	mainCamera.renderFrame(primaryWOL);
+}
+
+static void render_prelimQuads_RTTNW()
+{
+	// Engine init.
+	std::vector<ColorVec3> pixelBuffer;
+
+	// World
+	WorldObjectList primaryWOL;
+
+	// Materials
+	std::shared_ptr<MLambertian> leftRedMat = std::make_shared<MLambertian>(ColorVec3(1.0, 0.2, 0.2));
+	std::shared_ptr<MLambertian> backGreenMat = std::make_shared<MLambertian>(ColorVec3(0.2, 1.0, 0.2));
+	std::shared_ptr<MLambertian> rightBlueMat = std::make_shared<MLambertian>(ColorVec3(0.2, 0.2, 1.0));
+	std::shared_ptr<MLambertian> upperOrangeMat = std::make_shared<MLambertian>(ColorVec3(1.0, 0.5, 0.0));
+	std::shared_ptr<MLambertian> lowerTealMat = std::make_shared<MLambertian>(ColorVec3(0.2, 0.8, 0.8));
+
+	// Quads
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-3, -2, 5), Vec3(0, 0, -4), Vec3(0, 4, 0), leftRedMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-2, -2, 0), Vec3(4, 0, 0), Vec3(0, 4, 0), backGreenMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(3, -2, 1), Vec3(0, 0, 4), Vec3(0, 4, 0), rightBlueMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-2, 3, 1), Vec3(4, 0, 0), Vec3(0, 0, 4), upperOrangeMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-2, -3, 5), Vec3(4, 0, 0), Vec3(0, 0, -4), lowerTealMat));
 
 
 

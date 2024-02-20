@@ -159,6 +159,7 @@
     <ClInclude Include="src\headers\textures\checkers.h" />
     <ClInclude Include="src\headers\textures\image.h" />
     <ClInclude Include="src\headers\textures\noise.h" />
+    <ClInclude Include="src\headers\world_objects\quad.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

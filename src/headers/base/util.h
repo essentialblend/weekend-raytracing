@@ -121,21 +121,24 @@ inline void UPrintSuccessLog(
 #include "image_helper_stb.h"
 #include "../textures/image.h"
 #include "../textures/noise.h"
+#include "../world_objects/quad.h"
+
 
 
 // CONSTS
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 50 };
-constexpr int MAX_RAY_BOUNCES{ 50 };
-constexpr double VERTICAL_FOV{ 20 };
-constexpr int RES_WIDTH_PIXELS{ 600 };
+constexpr int AA_NUM_SAMPLES{ 100 };
+constexpr int MAX_RAY_BOUNCES{ 100 };
+constexpr double VERTICAL_FOV{ 80 };
+constexpr int RES_WIDTH_PIXELS{ 400 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0 };
-constexpr double CAM_FOCUS_DIST{ 12 };
+constexpr double CAM_FOCUS_DIST{ 1 };
 
-const Vec3 CAM_LOOKFROM_VEC(13, 2, 3);
+const Vec3 CAM_LOOKFROM_VEC(0, 0, 9);
 const Vec3 CAM_LOOKAT_VEC(0, 0, 0);
 const Vec3 WORLD_UP(0, 1, 0);
 
 static void render_RTIOW();
 static void render_earth_RTTNW();
 static void render_perlin_RTTNW();
+static void render_prelimQuads_RTTNW();

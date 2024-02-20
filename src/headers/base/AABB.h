@@ -76,4 +76,15 @@ public:
 		}
 		return true;
 	}
+
+	AABB padBoundingBox() const
+	{
+		double delta = 0.0001;
+		Interval newX = (xInterval.getIntervalSize() >= delta) ? xInterval : xInterval.expandIntervalForPadding(delta);
+		Interval newY = (yInterval.getIntervalSize() >= delta) ? yInterval : yInterval.expandIntervalForPadding(delta);
+		Interval newZ = (zInterval.getIntervalSize() >= delta) ? zInterval : zInterval.expandIntervalForPadding(delta);
+		
+		return AABB(newX, newY, newZ);
+	}
+
 };
