@@ -1,20 +1,16 @@
 #pragma once
 
-// Disable strict warnings for this header from the Microsoft Visual C++ compiler.
-#ifdef _MSC_VER
 #pragma warning (push, 0)
-#endif
-
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
-
 #include "../../dep/stb_image.h"
+
 
 class ImageHelperSTB {
 public:
-    ImageHelperSTB() : data(nullptr) {}
+    ImageHelperSTB() : data(nullptr), bytesPerScanline(0) {}
 
-    ImageHelperSTB(const char* imgFileName) {
+    ImageHelperSTB(const char* imgFileName) : bytesPerScanline(0), data(nullptr) {
 
         std::string fileName = std::string(imgFileName);
         char* imageDir = getenv("images");
@@ -70,7 +66,4 @@ private:
         return high - 1;
     }
 };
-
-#ifdef _MSC_VER
 #pragma warning (pop)
-#endif

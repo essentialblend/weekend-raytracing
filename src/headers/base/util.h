@@ -101,6 +101,8 @@ inline void UPrintSuccessLog(
     UWriteToClog(pixelProcessDetails);
 }
 
+#pragma warning(push)
+#pragma warning(disable : 4100)
 // Includes.
 #include "interval.h"
 #include "vec3.h"
@@ -124,7 +126,7 @@ inline void UPrintSuccessLog(
 #include "../textures/noise.h"
 #include "../world_objects/quad.h"
 #include "../materials/emissive.h"
-
+#pragma warning(pop)
 
 
 // CONSTS
@@ -145,3 +147,4 @@ static void render_earth_RTTNW();
 static void render_perlin_RTTNW();
 static void render_prelimQuads_RTTNW();
 static void render_emissiveLights_RTTNW();
+static void render_cornellBox_RTTNW();

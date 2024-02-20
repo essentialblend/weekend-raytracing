@@ -66,3 +66,25 @@ private:
 	double D;
 	Vec3 wVec; // For simplification.
 };
+
+inline std::shared_ptr<WorldObjectList> genBoxFromQuads(const PointVec3& min, const PointVec3& max, std::shared_ptr<Material> boxMat)
+{
+	std::shared_ptr<WorldObjectList> boxSides{ std::make_shared<WorldObjectList>() };
+
+	// Construct two opposite coords.
+	PointVec3 minV = PointVec3((std::fmin(min.getX(), max.getX())), (std::fmin(min.getY(), max.getY())), (std::fmin(min.getZ(), max.getZ())));
+	PointVec3 maxV = PointVec3((std::fmax(min.getX(), max.getX())), (std::fmax(min.getY(), max.getY())), (std::fmax(min.getZ(), max.getZ())));
+
+	Vec3 dX{ Vec3(max.getX() - min.getX(), 0, 0) };
+	Vec3 dY{ Vec3(0, max.getY() - min.getY(), 0) };
+	Vec3 dZ{ Vec3(0, 0, max.getZ() - min.getZ()) };
+
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(min.getX(), min.getY(), max.getZ()), dX, dY, boxMat));
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(max.getX(), min.getY(), max.getZ()), -dZ, dY, boxMat));
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(max.getX(), min.getY(), min.getZ()), -dX, dY, boxMat));
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(min.getX(), min.getY(), min.getZ()), dZ, dY, boxMat));
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(min.getX(), max.getY(), max.getZ()), dX, -dZ, boxMat));
+	boxSides->addToWorld(std::make_shared<WOQuad>(PointVec3(min.getX(), min.getY(), min.getZ()), dX, dZ, boxMat));
+
+	return boxSides;
+}

@@ -2,13 +2,14 @@
 
 int main()
 {
-	switch (5)
+	switch (6)
 	{
 	case 1: render_RTIOW(); break;
 	case 2: render_earth_RTTNW(); break;
 	case 3: render_perlin_RTTNW(); break;
 	case 4: render_prelimQuads_RTTNW(); break;
 	case 5: render_emissiveLights_RTTNW(); break;
+	case 6: render_cornellBox_RTTNW(); break;
 	}
 
 	return 0;
@@ -181,7 +182,7 @@ static void render_emissiveLights_RTTNW()
 	
 	int AA{ 500 };
 	int maxDepth{ 500 };
-	int resW{ 1200 };
+	int resW{ 400 };
 	double vFOV{ 20 };
 	double camDefocusAngle{ 0 };
 	double camFocusDist{ 1 };
@@ -192,7 +193,51 @@ static void render_emissiveLights_RTTNW()
 	Vec3 camWUP(0, 1, 0);
 
 	// Camera init.
-	Camera mainCamera((16.0 / 9.0), resW, pixelBuffer, USE_MT, AA, maxDepth, vFOV, camLF, camLA, camWUP, camDefocusAngle, camFocusDist, sceneBG);
+	Camera mainCamera((16.0 / 9.0), static_cast<unsigned short>(resW), pixelBuffer, USE_MT, AA, maxDepth, vFOV, camLF, camLA, camWUP, camDefocusAngle, camFocusDist, sceneBG);
+
+	mainCamera.renderFrame(primaryWOL);
+}
+
+static void render_cornellBox_RTTNW()
+{
+	// Engine init.
+	std::vector<ColorVec3> pixelBuffer;
+
+	// World
+	WorldObjectList primaryWOL;
+
+	// Materials
+	std::shared_ptr<MLambertian> redWallMat{ std::make_shared<MLambertian>(ColorVec3(0.65f, 0.05f, 0.05f)) };
+	std::shared_ptr<MLambertian> whiteWallMat{ std::make_shared<MLambertian>(ColorVec3(0.73f, 0.73f, 0.73f)) };
+	std::shared_ptr<MLambertian> greenWallMat{ std::make_shared<MLambertian>(ColorVec3(0.12f, 0.45f, 0.15f)) };
+	std::shared_ptr<MEmissive> emissiveLightMat{ std::make_shared<MEmissive>(ColorVec3(15.f, 15.f, 15.f)) };
+
+	// Quads.
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(555, 0, 0), Vec3(0, 555, 0), Vec3(0, 0, 555), greenWallMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(0, 0, 0), Vec3(0, 555, 0), Vec3(0, 0, 555), redWallMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(343, 554, 332), Vec3(-130, 0, 0), Vec3(0, 0, -105), emissiveLightMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(0, 0, 0), Vec3(555, 0, 0), Vec3(0, 0, 555), whiteWallMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(555, 555, 555), Vec3(-555, 0, 0), Vec3(0, 0, -555), whiteWallMat));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(0, 0, 555), Vec3(555, 0, 0), Vec3(0, 555, 0), whiteWallMat));
+
+	// Boxes
+	primaryWOL.addToWorld(genBoxFromQuads(PointVec3(130, 0, 65), PointVec3(295, 165, 230), whiteWallMat));
+	primaryWOL.addToWorld(genBoxFromQuads(PointVec3(265, 0, 295), PointVec3(430, 330, 460), whiteWallMat));
+
+	int AA{ 500 };
+	int maxDepth{ 500 };
+	int resW{ 400 };
+	double vFOV{ 40 };
+	double camDefocusAngle{ 0 };
+	double camFocusDist{ 1 };
+
+	ColorVec3 sceneBG(0);
+	Vec3 camLF(278, 278, -800);
+	Vec3 camLA(278, 278, 0);
+	Vec3 camWUP(0, 1, 0);
+
+	// Camera init.
+	Camera mainCamera((1), static_cast<unsigned short>(resW), pixelBuffer, USE_MT, AA, maxDepth, vFOV, camLF, camLA, camWUP, camDefocusAngle, camFocusDist, sceneBG);
 
 	mainCamera.renderFrame(primaryWOL);
 }
