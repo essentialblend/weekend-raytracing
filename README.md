@@ -16,10 +16,13 @@ Current Features:
 
 - Motion blur. (RTTNW-P2)
 - AABB BVH. (RTTNW-P2)
-- Textures. (RTTNW-P2)
 - Solid color, Image, and Noise Textures. (RTTNW-P2)
 - Perlin Noise with trilinear interpolation and Hermitian Smoothing. (RTTNW-P2)
-  
+- Emissive lights. (RTTNW-P2)
+- Primitives: Quads, and spheres. (RTTNW-P2)
+- Volumes. (RTTNW-P2)
+
+
 Improvements:
 - Basic multi-threading.
 - Uniformly distributed per-pixel jittered AA.
@@ -45,4 +48,10 @@ Directory Structure
 Progress
 --------------------
 - [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) (Now complete!)
-- [_Ray Tracing: The Next Week_](https://raytracing.github.io/books/RayTracingTheNextWeek.html) (In Progress!)
+- [_Ray Tracing: The Next Week_](https://raytracing.github.io/books/RayTracingTheNextWeek.html) (Now complete!)
+
+
+Third-party libraries:
+---------------------
+- [_stb_image_](https://github.com/nothings/stb/blob/master/stb_image.h)
+- [_ImageMagick_](https://github.com/imagemagick/imagemagick)
