@@ -110,6 +110,7 @@ inline void UPrintSuccessLog(
 #include "worldObjectList.h"
 #include "../world_objects/sphere.h"
 #include "../base/texture.h"
+#include "../textures/solid_color.h"
 #include "../textures/checkers.h"
 #include "material.h"
 #include "../materials/lambertian.h"
@@ -122,7 +123,7 @@ inline void UPrintSuccessLog(
 #include "../textures/image.h"
 #include "../textures/noise.h"
 #include "../world_objects/quad.h"
-#include "../materials/diffuse_light.h"
+#include "../materials/emissive.h"
 
 
 
@@ -143,3 +144,4 @@ static void render_RTIOW();
 static void render_earth_RTTNW();
 static void render_perlin_RTTNW();
 static void render_prelimQuads_RTTNW();
+static void render_emissiveLights_RTTNW();

@@ -5,7 +5,7 @@ class Camera
 public:
 	Camera() {};
 
-	Camera(double aspRatio, unsigned short imgW, const std::vector<Vec3>& pixelBuffer, bool useMT, int jitterSamples, int maxDepth, double vFOV, const PointVec3& lookF, const PointVec3& lookAt, const Vec3& camVUP, double defocusAngle, double focusDist) : aspectRatio(aspRatio), imageWidthPixels(imgW), pixelBuffer(pixelBuffer), useMT(useMT), jitterSamplesAA(jitterSamples), maxRayBouncesDepth(maxDepth), verticalFOV(vFOV), camLookFromPoint(lookF), camLookAtPoint(lookAt), camVUP(camVUP), defocusAngle(defocusAngle), focusDist(focusDist) {}
+	Camera(double aspRatio, unsigned short imgW, const std::vector<Vec3>& pixelBuffer, bool useMT, int jitterSamples, int maxDepth, double vFOV, const PointVec3& lookF, const PointVec3& lookAt, const Vec3& camVUP, double defocusAngle, double focusDist, const ColorVec3& sceneBG) : aspectRatio(aspRatio), imageWidthPixels(imgW), pixelBuffer(pixelBuffer), useMT(useMT), jitterSamplesAA(jitterSamples), maxRayBouncesDepth(maxDepth), verticalFOV(vFOV), camLookFromPoint(lookF), camLookAtPoint(lookAt), camVUP(camVUP), defocusAngle(defocusAngle), focusDist(focusDist), sceneBackgroundColor(sceneBG) {}
 
 	const std::vector<Vec3>& getPixelBuffer() const
 	{
@@ -132,26 +132,31 @@ private:
 	{
 		HitRecord tempRec;
 
+		// If we hit max bounces for the input ray, return no color.
 		if (bounceDepthParam <= 0)
 		{
 			return ColorVec3(0.f);
 		}
 
+		// If we don't hit anything, return scene bg color.
 		if (!mainWorld.checkHit(inputRay, Interval(0.001, +Uinf), tempRec))
 		{
 			
 			return sceneBackgroundColor;
 		}
 
+		
 		Ray scatteredRay;
 		ColorVec3 attenuationValue;
-		ColorVec3 colorFromEmission = tempRec.hitMaterial->emittedLight(tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
+		ColorVec3 colorFromEmission = tempRec.hitMaterial->getEmittedLight(tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
 
+		// If there's no scatter (if we have emissive materials), return emission color.
 		if (!tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue))
 		{
 			return colorFromEmission;
 		}
 
+		// Else, compute pixel color for scattered ray.
 		ColorVec3 colorFromScatter = attenuationValue * computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld);
 
 		return colorFromEmission + colorFromScatter;

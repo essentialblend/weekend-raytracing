@@ -5,7 +5,7 @@ class Material
 public:
 	virtual ~Material() = default;
 
-	virtual ColorVec3 emittedLight(double u, double v, const PointVec3& p) const {
+	virtual ColorVec3 getEmittedLight(double u, double v, const PointVec3& p) const {
 		return ColorVec3(0);
 	}
 

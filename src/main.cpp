@@ -2,12 +2,13 @@
 
 int main()
 {
-	switch (4)
+	switch (5)
 	{
 	case 1: render_RTIOW(); break;
 	case 2: render_earth_RTTNW(); break;
 	case 3: render_perlin_RTTNW(); break;
 	case 4: render_prelimQuads_RTTNW(); break;
+	case 5: render_emissiveLights_RTTNW(); break;
 	}
 
 	return 0;
@@ -81,7 +82,9 @@ static void render_RTIOW()
 	Vec3 lookF(-2, 2, 1);
 	Vec3 lookAt(0, 0, -1);
 	Vec3 camVUP(0, 1, 0);
-	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+	ColorVec3 sceneBG(0.7, 0.8, 1.0);
+
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, sceneBG);
 
 	mainCamera.renderFrame(primaryWOL);
 }
@@ -91,6 +94,7 @@ static void render_earth_RTTNW()
 	// Engine init.
 	std::vector<ColorVec3> pixelBuffer;
 
+
 	// World
 	WorldObjectList primaryWOL;
 
@@ -98,8 +102,10 @@ static void render_earth_RTTNW()
 	std::shared_ptr<MLambertian> earthSurface = std::make_shared<MLambertian>(earthTex);
 	std::shared_ptr<WOSphere> globeEarth = std::make_shared<WOSphere>(PointVec3(0, 0, 0), 2, earthSurface);
 
+	ColorVec3 sceneBG(0.7, 0.8, 1.0);
+
 	// Camera init.
-	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, sceneBG);
 
 	mainCamera.renderFrame(WorldObjectList(globeEarth));
 }
@@ -118,9 +124,10 @@ static void render_perlin_RTTNW()
 	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, 2, 0), 2, std::make_shared<MLambertian>(perlinNoiseTex)));
 
 
+	ColorVec3 sceneBG(0.7, 0.8, 1.0);
 
 	// Camera init.
-	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, sceneBG);
 
 	mainCamera.renderFrame(primaryWOL);
 }
@@ -147,10 +154,45 @@ static void render_prelimQuads_RTTNW()
 	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-2, 3, 1), Vec3(4, 0, 0), Vec3(0, 0, 4), upperOrangeMat));
 	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(-2, -3, 5), Vec3(4, 0, 0), Vec3(0, 0, -4), lowerTealMat));
 
-
+	ColorVec3 sceneBG(0.7, 0.8, 1.0);
 
 	// Camera init.
-	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST);
+	Camera mainCamera((16.0 / 9.0), RES_WIDTH_PIXELS, pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, sceneBG);
+
+	mainCamera.renderFrame(primaryWOL);
+}
+
+static void render_emissiveLights_RTTNW()
+{
+	// Engine init.
+	std::vector<ColorVec3> pixelBuffer;
+	
+
+	// World
+	WorldObjectList primaryWOL;
+
+	std::shared_ptr<TNoise> perlinTexture = std::make_shared<TNoise>(3);
+
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, -1000, 0), 1000, std::make_shared<MLambertian>(perlinTexture)));
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(0, 2, 0), 2, std::make_shared<MLambertian>(perlinTexture)));
+
+	std::shared_ptr<MEmissive> emissiveLightTex = std::make_shared<MEmissive>(ColorVec3(6, 0, 0));
+	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(3, 1, -2), Vec3(2, 0, 0), Vec3(0, 2, 0), emissiveLightTex));
+	
+	int AA{ 500 };
+	int maxDepth{ 500 };
+	int resW{ 1200 };
+	double vFOV{ 20 };
+	double camDefocusAngle{ 0 };
+	double camFocusDist{ 1 };
+
+	ColorVec3 sceneBG(0);
+	Vec3 camLF(26, 3, 6);
+	Vec3 camLA(0, 2, 0);
+	Vec3 camWUP(0, 1, 0);
+
+	// Camera init.
+	Camera mainCamera((16.0 / 9.0), resW, pixelBuffer, USE_MT, AA, maxDepth, vFOV, camLF, camLA, camWUP, camDefocusAngle, camFocusDist, sceneBG);
 
 	mainCamera.renderFrame(primaryWOL);
 }

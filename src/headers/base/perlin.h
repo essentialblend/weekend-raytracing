@@ -49,9 +49,9 @@ public:
 
     double genTurbulence(const PointVec3& p, int depth = 7) const
     {
-        auto accum = 0.f;
+        double accum = 0.f;
         PointVec3 tempP = p;
-        auto weight = 1.f;
+        double weight = 1.f;
 
         for (int i = 0; i < depth; i++)
         {
@@ -96,7 +96,7 @@ private:
 
     static double genTrilinearInterpolation(Vec3 c[2][2][2], double u, double v, double w)
     {
-        float accum = 0.f;
+        double accum = 0.f;
         double uu = u * u * (3 - (2 * u));
         double vv = v * v * (3 - (2 * v));
         double ww = w * w * (3 - (2 * w));
