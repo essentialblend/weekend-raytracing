@@ -91,6 +91,7 @@ private:
 	double focusDist{ 10 };
 	Vec3 defocusDiskUX;
 	Vec3 defocusDiskVY;
+	ColorVec3 sceneBackgroundColor;
 
 	void initializeCamera()
 	{
@@ -136,21 +137,24 @@ private:
 			return ColorVec3(0.f);
 		}
 
-		if (mainWorld.checkHit(inputRay, Interval(0.001, +Uinf), tempRec))
+		if (!mainWorld.checkHit(inputRay, Interval(0.001, +Uinf), tempRec))
 		{
-			Ray scatteredRay;
-			ColorVec3 attenuationValue;
-
-			if (tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue))
-			{
-				return attenuationValue * computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld);
-			}
-			return ColorVec3(0.f);
+			
+			return sceneBackgroundColor;
 		}
 
-		Vec3 unitDirection = computeUnitVector(inputRay.getRayDirection());
-		double lerpFactor = 0.5 * (unitDirection.getY() + 1.f);
-		return ((1 - lerpFactor) * ColorVec3(1.f)) + (lerpFactor * ColorVec3(0.5f, 0.7f, 1.f));
+		Ray scatteredRay;
+		ColorVec3 attenuationValue;
+		ColorVec3 colorFromEmission = tempRec.hitMaterial->emittedLight(tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
+
+		if (!tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue))
+		{
+			return colorFromEmission;
+		}
+
+		ColorVec3 colorFromScatter = attenuationValue * computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld);
+
+		return colorFromEmission + colorFromScatter;
 	}
 
 	// Render chunks if MT, else treat it as a typical render function for the entire screen for ST.

@@ -122,6 +122,7 @@ inline void UPrintSuccessLog(
 #include "../textures/image.h"
 #include "../textures/noise.h"
 #include "../world_objects/quad.h"
+#include "../materials/diffuse_light.h"
 
 
 

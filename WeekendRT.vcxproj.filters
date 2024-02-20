@@ -89,5 +89,8 @@
     <ClInclude Include="src\headers\world_objects\quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\materials\diffuse_light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

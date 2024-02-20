@@ -154,6 +154,7 @@
     <ClInclude Include="src\headers\base\worldObject.h" />
     <ClInclude Include="src\headers\base\worldObjectList.h" />
     <ClInclude Include="src\headers\materials\dielectric.h" />
+    <ClInclude Include="src\headers\materials\diffuse_light.h" />
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
     <ClInclude Include="src\headers\textures\checkers.h" />
