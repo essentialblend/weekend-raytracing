@@ -221,15 +221,22 @@ static void render_cornellBox_RTTNW()
 	primaryWOL.addToWorld(std::make_shared<WOQuad>(PointVec3(0, 0, 555), Vec3(555, 0, 0), Vec3(0, 555, 0), whiteWallMat));
 
 	// Boxes
-	primaryWOL.addToWorld(genBoxFromQuads(PointVec3(130, 0, 65), PointVec3(295, 165, 230), whiteWallMat));
-	primaryWOL.addToWorld(genBoxFromQuads(PointVec3(265, 0, 295), PointVec3(430, 330, 460), whiteWallMat));
+	std::shared_ptr<WorldObject> leftBox = genBoxFromQuads(PointVec3(0, 0, 0), PointVec3(165, 330, 165), whiteWallMat);
+	leftBox = std::make_shared<WORotateY>(leftBox, 15);
+	leftBox = std::make_shared<WOTranslate>(leftBox, Vec3(265, 0, 295));
+	primaryWOL.addToWorld(leftBox);
 
-	int AA{ 500 };
-	int maxDepth{ 500 };
-	int resW{ 400 };
+	std::shared_ptr<WorldObject> rightBox = genBoxFromQuads(PointVec3(0, 0, 0), PointVec3(165), whiteWallMat);
+	rightBox = std::make_shared<WORotateY>(rightBox, -18);
+	rightBox = std::make_shared<WOTranslate>(rightBox, Vec3(130, 0, 65));
+	primaryWOL.addToWorld(rightBox);
+
+	int AA{ 1000 };
+	int maxDepth{ 1000 };
+	int resW{ 1440 };
 	double vFOV{ 40 };
 	double camDefocusAngle{ 0 };
-	double camFocusDist{ 1 };
+	double camFocusDist{ 20 };
 
 	ColorVec3 sceneBG(0);
 	Vec3 camLF(278, 278, -800);

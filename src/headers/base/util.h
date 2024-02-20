@@ -126,6 +126,8 @@ inline void UPrintSuccessLog(
 #include "../textures/noise.h"
 #include "../world_objects/quad.h"
 #include "../materials/emissive.h"
+#include "../world_objects/transforms/translate.h"
+#include "../world_objects/transforms/rotate_y.h"
 #pragma warning(pop)
 
 

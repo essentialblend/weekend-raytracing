@@ -59,3 +59,13 @@ private:
 	double minBound;
 	double maxBound;
 };
+
+Interval operator+(const Interval& iv, double dispVal)
+{
+	return Interval(iv.getIntervalMinRange() + dispVal, iv.getIntervalMaxRange() + dispVal);
+}
+
+Interval operator+(double dispVal, const Interval& iv)
+{
+	return iv + dispVal;
+}

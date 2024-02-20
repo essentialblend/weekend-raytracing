@@ -95,5 +95,11 @@
     <ClInclude Include="src\headers\textures\solid_color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\world_objects\transforms\translate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\world_objects\transforms\rotate_y.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

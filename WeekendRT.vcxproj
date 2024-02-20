@@ -163,6 +163,8 @@
     <ClInclude Include="src\headers\textures\solid_color.h" />
     <ClInclude Include="src\headers\world_objects\quad.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
+    <ClInclude Include="src\headers\world_objects\transforms\rotate_y.h" />
+    <ClInclude Include="src\headers\world_objects\transforms\translate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -86,5 +86,14 @@ public:
 		
 		return AABB(newX, newY, newZ);
 	}
-
 };
+
+AABB operator+(const AABB& bbox, const Vec3& offset)
+{
+	return AABB(bbox.xInterval + offset.getX(), bbox.yInterval + offset.getY(), bbox.zInterval + offset.getZ());
+}
+
+AABB operator+(const Vec3& offset, const AABB& bbox)
+{
+	return bbox + offset;
+}
