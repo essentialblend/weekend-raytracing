@@ -3,8 +3,8 @@ My First C++ Path Tracer
 
 A brute force path-traced renderer implemented using the [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) series by Peter Shirley and co.
 
-![render](https://github.com/essentialblend/weekend-raytracing/assets/73982939/32654630-fedf-4d0e-845f-a3b850ddc585)
-*1920 x 1080, 150 spp, 150 max. bounces*
+![render](https://github.com/essentialblend/weekend-raytracing/assets/73982939/4f645b09-51dd-4a99-aa34-4163398a2e88)
+*Part 2- 1440 x 1440, 1000 spp, 1000 max. bounces*
 
 Current Features:
 - Developed from scratch using C++. (RTiOW-P1)
@@ -22,6 +22,9 @@ Current Features:
 - Primitives: Quads, and spheres. (RTTNW-P2)
 - Volumes. (RTTNW-P2)
 
+
+![render](https://github.com/essentialblend/weekend-raytracing/assets/73982939/32654630-fedf-4d0e-845f-a3b850ddc585)
+*1920 x 1080, 150 spp, 150 max. bounces*
 
 Improvements:
 - Basic multi-threading.
