@@ -101,5 +101,11 @@
     <ClInclude Include="src\headers\world_objects\transforms\rotate_y.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\world_objects\constant_vol_medium.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\materials\isotropic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -55,6 +55,8 @@ public:
 		return Interval(minBound - (deltaV / 2), maxBound + (deltaV / 2));
 	}
 
+	static const Interval emptyInterval, universalInterval;
+
 private:
 	double minBound;
 	double maxBound;
@@ -69,3 +71,6 @@ Interval operator+(double dispVal, const Interval& iv)
 {
 	return iv + dispVal;
 }
+
+const Interval Interval::emptyInterval = Interval(+Uinf, -Uinf);
+const Interval Interval::universalInterval = Interval(-Uinf, +Uinf);

@@ -231,9 +231,22 @@ static void render_cornellBox_RTTNW()
 	rightBox = std::make_shared<WOTranslate>(rightBox, Vec3(130, 0, 65));
 	primaryWOL.addToWorld(rightBox);
 
+	// Define the boundaries of the Cornell Box to be filled with mist
+	auto boxMin = PointVec3(0, 0, 0);
+	auto boxMax = PointVec3(555, 555, 555);
+	std::shared_ptr<WorldObject> mistBoundary = genBoxFromQuads(boxMin, boxMax, whiteWallMat); // Use your function for creating a box
+
+	// Define a low-density medium material for the mist
+	double mistDensity = 0.001; // Adjust this value to get the desired effect
+	ColorVec3 mistColor = ColorVec3(1.0, 1.0, 1.0); // White mist
+
+	// Create the mist volume using the constant_medium class
+	auto mistVolume = std::make_shared<WOConstantVolMedium>(mistBoundary, mistDensity, mistColor);
+	primaryWOL.addToWorld(mistVolume);
+
 	int AA{ 1000 };
 	int maxDepth{ 1000 };
-	int resW{ 1440 };
+	int resW{ 1080 };
 	double vFOV{ 40 };
 	double camDefocusAngle{ 0 };
 	double camFocusDist{ 20 };

@@ -155,12 +155,14 @@
     <ClInclude Include="src\headers\base\worldObjectList.h" />
     <ClInclude Include="src\headers\materials\dielectric.h" />
     <ClInclude Include="src\headers\materials\emissive.h" />
+    <ClInclude Include="src\headers\materials\isotropic.h" />
     <ClInclude Include="src\headers\materials\lambertian.h" />
     <ClInclude Include="src\headers\materials\metal.h" />
     <ClInclude Include="src\headers\textures\checkers.h" />
     <ClInclude Include="src\headers\textures\image.h" />
     <ClInclude Include="src\headers\textures\noise.h" />
     <ClInclude Include="src\headers\textures\solid_color.h" />
+    <ClInclude Include="src\headers\world_objects\constant_vol_medium.h" />
     <ClInclude Include="src\headers\world_objects\quad.h" />
     <ClInclude Include="src\headers\world_objects\sphere.h" />
     <ClInclude Include="src\headers\world_objects\transforms\rotate_y.h" />

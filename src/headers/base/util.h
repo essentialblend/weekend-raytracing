@@ -128,6 +128,9 @@ inline void UPrintSuccessLog(
 #include "../materials/emissive.h"
 #include "../world_objects/transforms/translate.h"
 #include "../world_objects/transforms/rotate_y.h"
+#include "../materials/isotropic.h"
+#include "../world_objects/constant_vol_medium.h"
+#include "../base/color.h"
 #pragma warning(pop)
 
 
