@@ -17,6 +17,10 @@ Current Features:
 - AABB BVH. (RTTNW-P2)
 - Solid color, Image, and Noise Textures. (RTTNW-P2)
 - Perlin Noise with trilinear interpolation and Hermitian Smoothing. (RTTNW-P2)
+- Emissive lights. (RTTNW-P2)
+- Primitives: Quads, and spheres. (RTTNW-P2)
+- Volumes. (RTTNW-P2)
+
 
 ![render](https://github.com/essentialblend/weekend-raytracing/assets/73982939/32654630-fedf-4d0e-845f-a3b850ddc585)
 *Part 1- 1920 x 1080, 150 spp, 150 max. bounces* 
@@ -29,6 +33,12 @@ Improvements:
 Branches:
 - `rtiow-book1`: Contains code from Ray Tracing in One Weekend.
 - `rttnw-book2`: Contains code from Ray Tracing The Next Week.
+
+Progress
+--------------------
+- [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) (Now complete!)
+- [_Ray Tracing: The Next Week_](https://raytracing.github.io/books/RayTracingTheNextWeek.html) (Now complete!)
+- [_Ray Tracing: The Rest of Your Life_](https://raytracing.github.io/books/RayTracingTheRestOfYourLife.html) (In progress!)
 
 Directory Structure
 -------------------
@@ -46,8 +56,3 @@ Directory Structure
 
   - `src/headers/world_objects` --
     Contains all derived world-object classes.
-
-Progress
---------------------
-- [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html) (Now complete!)
-- [_Ray Tracing: The Next Week_](https://raytracing.github.io/books/RayTracingTheNextWeek.html) (Now complete!)
