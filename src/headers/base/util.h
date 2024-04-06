@@ -30,10 +30,6 @@ inline double URadiansToDegrees(double radValue)
 // RNG
 inline double UGenRNGDouble()
 {
-    // Use high res clock as a seed.
-    /*auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
-    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));*/
-
     // Define the dist. range [0.f, 1.f).
     std::uniform_real_distribution<double> uniDist(0.f, 1.f);
 
@@ -42,10 +38,6 @@ inline double UGenRNGDouble()
 
 inline double UGenRNGDouble(double minVal, double maxVal)
 {
-    // Use high res clock as a seed.
-   /* auto rngSeed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
-    std::mt19937 rngEng(static_cast<unsigned int>(rngSeed));*/
-
     // Define the dist. range [0.f, 1.f).
     std::uniform_real_distribution<double> uniDist(minVal, maxVal);
 
@@ -115,6 +107,8 @@ inline void UPrintSuccessLog(
 #include "../textures/solid_color.h"
 #include "../textures/checkers.h"
 #include "material.h"
+#include "../base/onb.h"
+#include "../base/pdf.h"
 #include "../materials/lambertian.h"
 #include "../materials/metal.h"
 #include "../materials/dielectric.h"
@@ -130,26 +124,26 @@ inline void UPrintSuccessLog(
 #include "../world_objects/transforms/rotate_y.h"
 #include "../materials/isotropic.h"
 #include "../world_objects/constant_vol_medium.h"
-#include "../base/color.h"
+
 #pragma warning(pop)
 
 
-// CONSTS
+// CONSTS (currently setup for cornell box)
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 100 };
-constexpr int MAX_RAY_BOUNCES{ 100 };
-constexpr double VERTICAL_FOV{ 80 };
-constexpr int RES_WIDTH_PIXELS{ 400 };
+constexpr int AA_NUM_SAMPLES{ 64 };
+constexpr int MAX_RAY_BOUNCES{ 50 };
+constexpr double VERTICAL_FOV{ 40 };
+constexpr int RES_WIDTH_PIXELS{ 600 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0 };
-constexpr double CAM_FOCUS_DIST{ 1 };
+constexpr double CAM_FOCUS_DIST{ 20 };
 
-const Vec3 CAM_LOOKFROM_VEC(0, 0, 9);
-const Vec3 CAM_LOOKAT_VEC(0, 0, 0);
+const Vec3 CAM_LOOKFROM_VEC(278, 278, -800);
+const Vec3 CAM_LOOKAT_VEC(278, 278, 0);
 const Vec3 WORLD_UP(0, 1, 0);
 
-static void render_RTIOW();
-static void render_earth_RTTNW();
-static void render_perlin_RTTNW();
-static void render_prelimQuads_RTTNW();
-static void render_emissiveLights_RTTNW();
+//static void render_RTIOW();
+//static void render_earth_RTTNW();
+//static void render_perlin_RTTNW();
+//static void render_prelimQuads_RTTNW();
+//static void render_emissiveLights_RTTNW();
 static void render_cornellBox_RTTNW();

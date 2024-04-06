@@ -173,3 +173,18 @@ inline Vec3 genRandVec3UnitDisk()
 		}
 	}
 }
+
+inline Vec3 genRandomCosineDirRay()
+{
+	auto r1 = UGenRNGDouble();
+	auto r2 = UGenRNGDouble();
+
+	auto phi = 2 * Upi * r1;
+	auto x = cos(phi) * std::sqrt(r2);
+	auto y = sin(phi) * std::sqrt(r2);
+	auto z = std::sqrt(1 - r2);
+
+	Vec3 cosine(x, y, z);
+
+	return cosine;
+}

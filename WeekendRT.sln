@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WeekendRT", "WeekendRT.vcxproj", "{5A5186BA-C5BF-4551-93AB-3E56CBAC228F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "learning_exp", "learning_exp\learning_exp.vcxproj", "{8885DDCE-E618-4A12-9F09-5C79482A3DE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{5A5186BA-C5BF-4551-93AB-3E56CBAC228F}.Release|x64.Build.0 = Release|x64
 		{5A5186BA-C5BF-4551-93AB-3E56CBAC228F}.Release|x86.ActiveCfg = Release|Win32
 		{5A5186BA-C5BF-4551-93AB-3E56CBAC228F}.Release|x86.Build.0 = Release|Win32
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Debug|x64.ActiveCfg = Debug|x64
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Debug|x64.Build.0 = Debug|x64
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Debug|x86.ActiveCfg = Debug|Win32
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Debug|x86.Build.0 = Debug|Win32
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Release|x64.ActiveCfg = Release|x64
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Release|x64.Build.0 = Release|x64
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Release|x86.ActiveCfg = Release|Win32
+		{8885DDCE-E618-4A12-9F09-5C79482A3DE3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

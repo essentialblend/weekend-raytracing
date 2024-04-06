@@ -12,7 +12,7 @@ public:
 		return pixelBuffer;
 	}
 
-	void renderFrame(const WorldObject& mainWorld)
+	void renderFrame(const WorldObject& mainWorld, const WorldObject& lights)
 	{
 		initializeCamera();
 
@@ -20,6 +20,7 @@ public:
 		int rowsPerThread = imageHeightPixels / numAvailableThreads;
 
 		auto logTimeStart = std::chrono::high_resolution_clock::now();
+
 		if (useMT)
 		{
 			auto coutString = std::format("Starting multi-threaded rendering with {} threads...", numAvailableThreads);
@@ -40,7 +41,7 @@ public:
 				coutString = std::format("Thread {} processing pixel rows {} to {}...", t, startRow, endRow);
 				UWriteToCout(coutString);
 
-				mainThreads.emplace_back(&Camera::renderRowSegments, this, startRow, endRow, std::cref(mainWorld));
+				mainThreads.emplace_back(&Camera::renderRowSegments, this, startRow, endRow, std::cref(mainWorld), std::cref(lights));
 			}
 
 			// Wait for all threads to finish and log their completion.
@@ -53,7 +54,7 @@ public:
 		}
 		else
 		{
-			renderRowSegments(0, imageHeightPixels, mainWorld);
+			renderRowSegments(0, imageHeightPixels, mainWorld, lights);
 		}
 
 		bool retFlag;
@@ -128,9 +129,12 @@ private:
 		defocusDiskVY = camVVec * defocusRadius;
 	}
 
-	ColorVec3 computePixelColor(const Ray& inputRay, int bounceDepthParam, const WorldObject& mainWorld) const
+	ColorVec3 computePixelColor(const Ray& inputRay, int bounceDepthParam, const WorldObject& mainWorld, const WorldObject& lights) const
 	{
 		HitRecord tempRec;
+		Ray scatteredRay;
+		ColorVec3 attenuationValue;
+		double pdfDistValue{};
 
 		// If we hit max bounces for the input ray, return no color.
 		if (bounceDepthParam <= 0)
@@ -145,25 +149,41 @@ private:
 			return sceneBackgroundColor;
 		}
 
+		ColorVec3 colorFromEmission = tempRec.hitMaterial->getEmittedLight(inputRay, tempRec, tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
 		
-		Ray scatteredRay;
-		ColorVec3 attenuationValue;
-		ColorVec3 colorFromEmission = tempRec.hitMaterial->getEmittedLight(tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
 
 		// If there's no scatter (if we have emissive materials), return emission color.
-		if (!tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue))
+		if (!tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue, pdfDistValue))
 		{
 			return colorFromEmission;
 		}
 
+		/*auto onLight{ PointVec3(UGenRNGDouble(213, 343), 554, UGenRNGDouble(227, 332)) };
+		auto toLight{ onLight - tempRec.hitPoint };
+		auto distSq{ toLight.computeMagnitudeSquared() };
+		toLight = computeUnitVector(toLight);
+
+		if (computeDotProduct(toLight, tempRec.hitNormalVec) < 0) return colorFromEmission;
+
+		double lightSourceArea{ (343 - 213) * (332 - 227) };
+		auto lightCosine{ std::fabs(toLight.getY()) };
+		if (lightCosine < 0.000001) return colorFromEmission;
+
+		pdfDistValue = distSq / (lightCosine * lightSourceArea);
+		scatteredRay = Ray(tempRec.hitPoint, toLight, inputRay.getRayTime());*/
+
+		auto scatteringPDF = tempRec.hitMaterial->scatteringPDF(inputRay, tempRec, scatteredRay);
+
+		ColorVec3 sampleColor = computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld, lights);
+
 		// Else, compute pixel color for scattered ray.
-		ColorVec3 colorFromScatter = attenuationValue * computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld);
+		ColorVec3 colorFromScatter = (attenuationValue * scatteringPDF * sampleColor) / pdfDistValue;
 
 		return colorFromEmission + colorFromScatter;
 	}
 
 	// Render chunks if MT, else treat it as a typical render function for the entire screen for ST.
-	void renderRowSegments(int startRow, int endRow, const WorldObject& mainWorld)
+	void renderRowSegments(int startRow, int endRow, const WorldObject& mainWorld, const WorldObject& lights)
 	{
 		for (int j = startRow; j < endRow; ++j)
 		{
@@ -178,21 +198,24 @@ private:
 					{
 						Ray generatedRay{ generateRay(pixelX, pixelY, i, j) };
 						
-						pixelColor += computePixelColor(generatedRay, maxRayBouncesDepth, mainWorld);
+						pixelColor += computePixelColor(generatedRay, maxRayBouncesDepth, mainWorld, lights);
 					}
 				}
+				
 				pixelColor /= jitterSamplesAA;
-				Vec3 gammaCorrected{ linearToGamma(pixelColor) };
+
+				pixelColor = linearToGamma(pixelColor);
 
 				int bufferIndex = j * imageWidthPixels + i;
-				pixelBuffer[bufferIndex] = ColorVec3(static_cast<int>(256 * std::clamp(gammaCorrected.getX(), 0.000, 0.999)), static_cast<int>(256 * std::clamp(gammaCorrected.getY(), 0.000, 0.999)), static_cast<int>(256 * std::clamp(gammaCorrected.getZ(), 0.000, 0.999)));
+				pixelBuffer[bufferIndex] = ColorVec3(static_cast<int>(256 * std::clamp(pixelColor.getX(), 0.000, 0.999)), static_cast<int>(256 * std::clamp(pixelColor.getY(), 0.000, 0.999)), static_cast<int>(256 * std::clamp(pixelColor.getZ(), 0.000, 0.999)));
 			}
 		}
 	}
 
-	Vec3 linearToGamma(const Vec3& linearColorComp) const
+	ColorVec3 linearToGamma(const ColorVec3& linearPixelColor)
 	{
-		return Vec3(std::pow(linearColorComp.getX(), 1 / 2.2f), std::pow(linearColorComp.getY(), 1 / 2.2f), std::pow(linearColorComp.getZ(), 1 / 2.2f));
+		ColorVec3 gammaCorrected(std::sqrt(linearPixelColor.getX()), std::sqrt(linearPixelColor.getY()), std::sqrt(linearPixelColor.getZ()));
+		return gammaCorrected;
 	}
 
 	void handlePostRenderImageUtils(bool& retFlag)

@@ -5,7 +5,7 @@ class Ray
 public:
 	Ray() {}
 
-	Ray(const PointVec3& rayO, const Vec3& rayD, double rayT) : rayOrigin(rayO), rayDirection(rayD), rayTime(rayT) {}
+	Ray(const PointVec3& rayO, const Vec3& rayD, double rayT = 0) : rayOrigin(rayO), rayDirection(rayD), rayTime(rayT) {}
 
 	PointVec3 getRayOrigin() const { return rayOrigin; }
 

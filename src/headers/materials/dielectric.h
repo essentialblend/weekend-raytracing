@@ -6,7 +6,7 @@ class MDielectric : public Material
 public:
 	MDielectric(const double refInd) : refractionIndex(refInd) {}
 
-	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation) const override
+	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
 	{
 		colorAttenuation = ColorVec3(1.F);
 		double refractionRatio = hitRec.frontFace ? (1.f / refractionIndex) : refractionIndex;

@@ -13,10 +13,12 @@ public:
 
 		wVec = n / computeDotProduct(n, n);
 
+		quadArea = n.computeMagnitude();
+
 		setQuadBB();
 	}
 
-	virtual void setQuadBB()
+	void setQuadBB()
 	{
 		quadBBox = AABB(botLeftQ, botLeftQ + horizontalU + verticalV).padBoundingBox();
 	}
@@ -57,6 +59,30 @@ public:
 		return true;
 	}
 
+	double getPDFValue(const PointVec3& o, const Vec3& v) const override
+	{
+		HitRecord tempRec;
+
+		if (!this->checkHit(Ray(o, v), Interval(0.001, Uinf), tempRec))
+		{
+			return 0;
+		}
+
+		// I don't understand this properly.
+		auto distSq = tempRec.hitRoot * tempRec.hitRoot * v.computeMagnitudeSquared();
+		auto cosine = std::fabs(computeDotProduct(v, tempRec.hitNormalVec) / v.computeMagnitude());
+
+		return (distSq / (cosine * quadArea));
+	}
+
+	Vec3 getRandomX(const PointVec3& o) const override
+	{
+		// Potential mistake here, as the code uses dummy variable names, I'm not sure.
+		auto p = botLeftQ + (UGenRNGDouble() * horizontalU) + (UGenRNGDouble() * verticalV);
+		return (p - o);
+	}
+
+
 private:
 	PointVec3 botLeftQ;
 	Vec3 horizontalU, verticalV;
@@ -64,7 +90,8 @@ private:
 	AABB quadBBox;
 	Vec3 planeNormal;
 	double D;
-	Vec3 wVec; // For simplification.
+	Vec3 wVec;
+	double quadArea{};
 };
 
 inline std::shared_ptr<WorldObjectList> genBoxFromQuads(const PointVec3& min, const PointVec3& max, std::shared_ptr<Material> boxMat)

@@ -37,7 +37,6 @@ public:
 		return didItHit;
 	}
 
-
 private:
 	AABB boundingBox;
 };
