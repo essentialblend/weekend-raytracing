@@ -10,25 +10,56 @@ public:
     virtual Vec3 genDirWithPDF() const = 0;
 };
 
+// WorldObject PDF
 class WOPDF : public PDF {
 public:
     WOPDF(const WorldObject& _objects, const PointVec3& _origin)
-        : worldObject(_objects), objOrigin(_origin)
+        : worldObjects(_objects), objOrigin(_origin)
     {}
 
     double getPDFDistrValue(const Vec3& direction) const override {
-        return worldObject.getPDFValue(objOrigin, direction);
+        return worldObjects.getPDFVal(objOrigin, direction);
     }
 
     Vec3 genDirWithPDF() const override {
-        return worldObject.getRandomX(objOrigin);
+        return worldObjects.getRandomDirWithPDF(objOrigin);
     }
 
 private:
-    const WorldObject& worldObject;
+    const WorldObject& worldObjects;
     PointVec3 objOrigin;
 };
 
+// Mixture PDF
+class PDFMixture : public PDF
+{
+public:
+    PDFMixture(std::shared_ptr<PDF> firstPDF, std::shared_ptr<PDF> secPDF)
+    {
+        memPDFs[0] = firstPDF;
+        memPDFs[1] = secPDF;
+    }
+
+    double getPDFDistrValue(const Vec3& direction) const override {
+        return ((0.5 * memPDFs[0]->getPDFDistrValue(direction)) + (0.5 * memPDFs[1]->getPDFDistrValue(direction)));
+    }
+
+    Vec3 genDirWithPDF() const override {
+        if (UGenRNGDouble() < 0.5)
+        {
+            return memPDFs[0]->genDirWithPDF();
+        }
+        else
+        {
+            return memPDFs[1]->genDirWithPDF();
+        }
+    }
+
+private:
+    std::shared_ptr<PDF> memPDFs[2];
+};
+
+// Sphere PDF
 class PDFSphere : public PDF
 {
 public:
@@ -45,6 +76,7 @@ public:
     }
 };
 
+// Cosine PDF
 class PDFCosine : public PDF
 {
 public:

@@ -247,8 +247,7 @@ static void render_cornellBox_RTTNW()
 	// Light Sources
 	WorldObjectList lights;
 	auto m = std::shared_ptr<Material>();
-	lights.addToWorld(std::make_shared<WOQuad>(PointVec3(343, 554, 332), Vec3(-130, 0, 0), Vec3(0, 0, -105), m));
-	
+	lights.addToWorld(make_shared<WOQuad>(PointVec3(343, 554, 332), Vec3(-130, 0, 0), Vec3(0, 0, -105), m));
 
 	// Camera init.
 	Camera mainCamera((1), static_cast<unsigned short>(RES_WIDTH_PIXELS), pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, ColorVec3(0.f));

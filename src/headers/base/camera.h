@@ -158,26 +158,21 @@ private:
 			return colorFromEmission;
 		}
 
-		/*auto onLight{ PointVec3(UGenRNGDouble(213, 343), 554, UGenRNGDouble(227, 332)) };
-		auto toLight{ onLight - tempRec.hitPoint };
-		auto distSq{ toLight.computeMagnitudeSquared() };
-		toLight = computeUnitVector(toLight);
+		auto lightPDF = std::make_shared<WOPDF>(lights, tempRec.hitPoint);
+		auto cosinePDF = std::make_shared<PDFCosine>(tempRec.hitNormalVec);
+		PDFMixture mixedPDF(lightPDF, cosinePDF);
 
-		if (computeDotProduct(toLight, tempRec.hitNormalVec) < 0) return colorFromEmission;
-
-		double lightSourceArea{ (343 - 213) * (332 - 227) };
-		auto lightCosine{ std::fabs(toLight.getY()) };
-		if (lightCosine < 0.000001) return colorFromEmission;
-
-		pdfDistValue = distSq / (lightCosine * lightSourceArea);
-		scatteredRay = Ray(tempRec.hitPoint, toLight, inputRay.getRayTime());*/
+		scatteredRay = Ray(tempRec.hitPoint, mixedPDF.genDirWithPDF(), inputRay.getRayTime());
+		pdfDistValue = mixedPDF.getPDFDistrValue(scatteredRay.getRayDirection());
 
 		auto scatteringPDF = tempRec.hitMaterial->scatteringPDF(inputRay, tempRec, scatteredRay);
-
+		
 		ColorVec3 sampleColor = computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld, lights);
 
+		ColorVec3 test = attenuationValue * scatteringPDF * sampleColor;
+
 		// Else, compute pixel color for scattered ray.
-		ColorVec3 colorFromScatter = (attenuationValue * scatteringPDF * sampleColor) / pdfDistValue;
+		ColorVec3 colorFromScatter = (test) / pdfDistValue;
 
 		return colorFromEmission + colorFromScatter;
 	}

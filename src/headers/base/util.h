@@ -38,7 +38,7 @@ inline double UGenRNGDouble()
 
 inline double UGenRNGDouble(double minVal, double maxVal)
 {
-    // Define the dist. range [0.f, 1.f).
+    // Define the dist. range [minVal, maxVal).
     std::uniform_real_distribution<double> uniDist(minVal, maxVal);
 
     return uniDist(rngEng);
@@ -130,8 +130,8 @@ inline void UPrintSuccessLog(
 
 // CONSTS (currently setup for cornell box)
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 64 };
-constexpr int MAX_RAY_BOUNCES{ 50 };
+constexpr int AA_NUM_SAMPLES{ 20 };
+constexpr int MAX_RAY_BOUNCES{ 64 };
 constexpr double VERTICAL_FOV{ 40 };
 constexpr int RES_WIDTH_PIXELS{ 600 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0 };

@@ -37,6 +37,24 @@ public:
 		return didItHit;
 	}
 
+	double getPDFVal(const PointVec3& o, const Vec3& v) const override
+	{
+		if (!WOList.empty())
+		{
+			return WOList[0]->getPDFVal(o, v);
+		}
+		return 0;
+	}
+
+	Vec3 getRandomDirWithPDF(const PointVec3& o) const override
+	{
+		if (!WOList.empty())
+		{
+			return WOList[0]->getRandomDirWithPDF(o);
+		}
+		return 0;
+	}
+
 private:
 	AABB boundingBox;
 };

@@ -49,7 +49,7 @@ public:
 		return true;
 	}
 
-	virtual bool isPointInsideQuad(double a, double b, HitRecord& hitRec) const
+	bool isPointInsideQuad(double a, double b, HitRecord& hitRec) const
 	{
 		if ((a < 0) || (1 < a) || (b < 0) || (1 < b)) return false;
 
@@ -59,7 +59,7 @@ public:
 		return true;
 	}
 
-	double getPDFValue(const PointVec3& o, const Vec3& v) const override
+	double getPDFVal(const PointVec3& o, const Vec3& v) const override
 	{
 		HitRecord tempRec;
 
@@ -68,14 +68,14 @@ public:
 			return 0;
 		}
 
-		// I don't understand this properly.
+
 		auto distSq = tempRec.hitRoot * tempRec.hitRoot * v.computeMagnitudeSquared();
 		auto cosine = std::fabs(computeDotProduct(v, tempRec.hitNormalVec) / v.computeMagnitude());
 
 		return (distSq / (cosine * quadArea));
 	}
 
-	Vec3 getRandomX(const PointVec3& o) const override
+	Vec3 getRandomDirWithPDF(const PointVec3& o) const override
 	{
 		// Potential mistake here, as the code uses dummy variable names, I'm not sure.
 		auto p = botLeftQ + (UGenRNGDouble() * horizontalU) + (UGenRNGDouble() * verticalV);

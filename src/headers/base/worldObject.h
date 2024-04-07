@@ -29,12 +29,12 @@ public:
 	virtual bool checkHit(const Ray& inputRay, Interval validInterval, HitRecord& hitRec) const = 0;
 	virtual AABB getWOBoundingBox() const = 0;
 
-	virtual double getPDFValue(const PointVec3& o, const Vec3& v) const {
+
+	virtual double getPDFVal(const PointVec3& o, const Vec3& v) const {
 		return 0.0;
 	}
 
-	virtual Vec3 getRandomX(const Vec3& o) const {
+	virtual Vec3 getRandomDirWithPDF(const PointVec3& o) const {
 		return Vec3(1, 0, 0);
 	}
-
 };

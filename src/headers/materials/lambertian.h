@@ -10,9 +10,7 @@ public:
 
 	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
 	{
-		PDFCosine surfacePDF(hitRec.hitNormalVec);
-		scatteredRay = Ray(hitRec.hitPoint, surfacePDF.genDirWithPDF(), inputRay.getRayTime());
-		pdf = surfacePDF.getPDFDistrValue(scatteredRay.getRayDirection());
+		
 		colorAttenuation = albedoTex->getTexColorAtCoords(hitRec.hitTexU, hitRec.hitTexV, hitRec.hitPoint);
 		return true;
 	}
@@ -20,7 +18,14 @@ public:
 	virtual double scatteringPDF(const Ray& inputRay, const HitRecord& hitRec, const Ray& scatteredRay) const
 	{
 		auto cosTheta = computeDotProduct(hitRec.hitNormalVec, computeUnitVector(scatteredRay.getRayDirection()));
-		return cosTheta < 0 ? 0 : (cosTheta / Upi);
+		if (cosTheta < 0)
+		{
+			return 0;
+		}
+		else
+		{
+			return cosTheta / Upi;
+		}
 	}
 
 private:
