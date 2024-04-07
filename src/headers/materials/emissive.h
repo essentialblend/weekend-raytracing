@@ -6,7 +6,7 @@ public:
 	MEmissive(std::shared_ptr<Texture> tex) : emittedTex(tex) {}
 	MEmissive(ColorVec3 lightCol) : emittedTex(std::make_shared<TSolidColor>(lightCol)) {}
 
-	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
+	bool handleRayScatter(const Ray& inputRay, const HitRecord& hitRec, ScatterRecord& scattRec) const override
 	{
 		return false;
 	}

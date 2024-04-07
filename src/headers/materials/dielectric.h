@@ -6,25 +6,30 @@ class MDielectric : public Material
 public:
 	MDielectric(const double refInd) : refractionIndex(refInd) {}
 
-	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
+	bool handleRayScatter(const Ray& inputRay, const HitRecord& hitRec, ScatterRecord& scattRec) const override
 	{
-		colorAttenuation = ColorVec3(1.F);
+		scattRec.attenuationParam = ColorVec3(1);
+		scattRec.PDFPointer = nullptr;
+		scattRec.skipPDF = true;
+
 		double refractionRatio = hitRec.frontFace ? (1.f / refractionIndex) : refractionIndex;
 		Vec3 unitDirectionVec = computeUnitVector(inputRay.getRayDirection());
 		double cosineTheta{ std::fmin(computeDotProduct(-unitDirectionVec, hitRec.hitNormalVec), 1.f) };
 		double sinTheta{ std::sqrt(1.f - (cosineTheta * cosineTheta)) };
 
 		bool cannotRefract{ (refractionRatio * sinTheta) > 1.f };
-
+		Vec3 rayDir;
 
 		if (cannotRefract || computeSchlicksApproxForReflectance(cosineTheta, refractionRatio) > UGenRNGDouble())
 		{
-			scatteredRay = Ray(hitRec.hitPoint, computeReflectionDirection(unitDirectionVec, hitRec.hitNormalVec), inputRay.getRayTime());
+			rayDir = computeReflectionDirection(unitDirectionVec, hitRec.hitNormalVec);
 		}
 		else
 		{
-			scatteredRay = Ray(hitRec.hitPoint, computeRefractionDirection(unitDirectionVec, hitRec.hitNormalVec, refractionRatio), inputRay.getRayTime());
+			rayDir = computeRefractionDirection(unitDirectionVec, hitRec.hitNormalVec, refractionRatio);
 		}
+
+		scattRec.skipPDFRay = Ray(hitRec.hitPoint, rayDir, inputRay.getRayTime());
 
 		return true;
 	}

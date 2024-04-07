@@ -2,6 +2,8 @@
 
 #include "../base/aabb.h"
 
+#include "../base/onb.h"
+
 class WOSphere : public WorldObject
 {
 public:
@@ -56,6 +58,30 @@ public:
 		return true;
 	}
 
+	double getPDFVal(const PointVec3& o, const Vec3& v) const override
+	{
+		HitRecord tempRec;
+
+		if (!this->checkHit(Ray(o, v), Interval(0.001, Uinf), tempRec))
+		{
+			return 0;
+		}
+
+		auto cosineThetaMax = std::sqrt(1 - ((sphereRadius * sphereRadius) / (initialSphereCenter - o).computeMagnitudeSquared()));
+		auto solidAngle = 2 * Upi * (1 - cosineThetaMax);
+
+		return 1 / solidAngle;
+	}
+
+	Vec3 getRandomDirWithPDF(const PointVec3& o) const override
+	{
+		Vec3 direction = initialSphereCenter - o;
+		auto distSq = direction.computeMagnitudeSquared();
+		ONB uvw;
+		uvw.buildFromW(direction);
+		return uvw.getLocalCoords(randToSphere(sphereRadius, distSq));
+	}
+
 
 private:
 	PointVec3 initialSphereCenter;
@@ -77,5 +103,17 @@ private:
 
 		u = phi / (2 * Upi);
 		v = theta / Upi;
+	}
+
+	static Vec3 randToSphere(double radius, double distance_squared) {
+		auto r1 = UGenRNGDouble();
+		auto r2 = UGenRNGDouble();
+		auto z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
+
+		auto phi = 2 * Upi * r1;
+		auto x = cos(phi) * sqrt(1 - z * z);
+		auto y = sin(phi) * sqrt(1 - z * z);
+
+		return Vec3(x, y, z);
 	}
 };

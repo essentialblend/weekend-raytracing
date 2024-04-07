@@ -3,14 +3,14 @@
 class MIsotropic : public Material
 {
 public:
-	MIsotropic(ColorVec3 color) : albedoVal(std::make_shared<TSolidColor>(color)) {}
-	MIsotropic(std::shared_ptr<Texture> tex) : albedoVal(tex) {}
+	MIsotropic(ColorVec3 color) : albedoTex(std::make_shared<TSolidColor>(color)) {}
+	MIsotropic(std::shared_ptr<Texture> tex) : albedoTex(tex) {}
 
-	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
+	bool handleRayScatter(const Ray& inputRay, const HitRecord& hitRec, ScatterRecord& scattRec) const override
 	{
-		scatteredRay = Ray(hitRec.hitPoint, genNormalizedRandVec3UnitSphere(), inputRay.getRayTime());
-		colorAttenuation = albedoVal->getTexColorAtCoords(hitRec.hitTexU, hitRec.hitTexV, hitRec.hitPoint);
-		pdf = 1 / (4 * Upi);
+		scattRec.attenuationParam = albedoTex->getTexColorAtCoords(hitRec.hitTexU, hitRec.hitTexV, hitRec.hitPoint);
+		scattRec.PDFPointer = std::make_shared<PDFSphere>();
+		scattRec.skipPDF = false;
 		return true;
 	}
 
@@ -20,5 +20,5 @@ public:
 	}
 
 private:
-	std::shared_ptr<Texture> albedoVal;
+	std::shared_ptr<Texture> albedoTex;
 };

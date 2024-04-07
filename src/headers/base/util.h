@@ -130,8 +130,8 @@ inline void UPrintSuccessLog(
 
 // CONSTS (currently setup for cornell box)
 constexpr bool USE_MT{ true };
-constexpr int AA_NUM_SAMPLES{ 20 };
-constexpr int MAX_RAY_BOUNCES{ 64 };
+constexpr int AA_NUM_SAMPLES{ 5000 };
+constexpr int MAX_RAY_BOUNCES{ 500 };
 constexpr double VERTICAL_FOV{ 40 };
 constexpr int RES_WIDTH_PIXELS{ 600 };
 constexpr double CAM_DEFOCUS_ANGLE{ 0 };

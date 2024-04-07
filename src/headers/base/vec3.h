@@ -12,6 +12,24 @@ public:
 	double getY() const { return member[1]; }
 	double getZ() const { return member[2]; }
 
+	void setX(double x)
+	{
+		member[0] = x;
+	}
+
+	void setY(double y)
+	{
+		member[1] = y;
+	}
+
+	void setZ(double z)
+	{
+		member[2] = z;
+	}
+
+
+
+
 	Vec3 operator-() const { return Vec3(-member[0], -member[1], -member[2]); }
 	double operator[](int i) const { return member[i]; }
 	double& operator[](int i) { return member[i]; }

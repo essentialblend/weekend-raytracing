@@ -1,5 +1,15 @@
 #pragma once
 
+class PDF;
+class ScatterRecord
+{
+public:
+	ColorVec3 attenuationParam{};
+	std::shared_ptr<PDF> PDFPointer;
+	bool skipPDF;
+	Ray skipPDFRay;
+};
+
 class Material
 {
 public:
@@ -9,7 +19,7 @@ public:
 		return ColorVec3(0);
 	}
 
-	virtual bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const = 0;
+	virtual bool handleRayScatter(const Ray& inputRay, const HitRecord& hitRec, ScatterRecord& scattRec) const = 0;
 
 	virtual double scatteringPDF(const Ray& inputRay, const HitRecord& hitRec, const Ray& scatteredRay) const
 	{

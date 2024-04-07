@@ -226,10 +226,14 @@ static void render_cornellBox_RTTNW()
 	leftBox = std::make_shared<WOTranslate>(leftBox, Vec3(265, 0, 295));
 	primaryWOL.addToWorld(leftBox);
 
-	std::shared_ptr<WorldObject> rightBox = genBoxFromQuads(PointVec3(0, 0, 0), PointVec3(165), whiteWallMat);
-	rightBox = std::make_shared<WORotateY>(rightBox, -18);
-	rightBox = std::make_shared<WOTranslate>(rightBox, Vec3(130, 0, 65));
-	primaryWOL.addToWorld(rightBox);
+	//std::shared_ptr<WorldObject> rightBox = genBoxFromQuads(PointVec3(0, 0, 0), PointVec3(165), whiteWallMat);
+	//rightBox = std::make_shared<WORotateY>(rightBox, -18);
+	//rightBox = std::make_shared<WOTranslate>(rightBox, Vec3(130, 0, 65));
+	//primaryWOL.addToWorld(rightBox);
+
+	auto glassMat = std::make_shared<MDielectric>(1.5);
+	primaryWOL.addToWorld(std::make_shared<WOSphere>(PointVec3(190, 90, 190), 90, glassMat));
+
 
 	// Define the boundaries of the Cornell Box to be filled with mist
 	auto boxMin = PointVec3(0, 0, 0);
@@ -248,6 +252,8 @@ static void render_cornellBox_RTTNW()
 	WorldObjectList lights;
 	auto m = std::shared_ptr<Material>();
 	lights.addToWorld(make_shared<WOQuad>(PointVec3(343, 554, 332), Vec3(-130, 0, 0), Vec3(0, 0, -105), m));
+	lights.addToWorld(std::make_shared<WOSphere>(PointVec3(190, 90, 190), 90, m));
+
 
 	// Camera init.
 	Camera mainCamera((1), static_cast<unsigned short>(RES_WIDTH_PIXELS), pixelBuffer, USE_MT, AA_NUM_SAMPLES, MAX_RAY_BOUNCES, VERTICAL_FOV, CAM_LOOKFROM_VEC, CAM_LOOKAT_VEC, WORLD_UP, CAM_DEFOCUS_ANGLE, CAM_FOCUS_DIST, ColorVec3(0.f));

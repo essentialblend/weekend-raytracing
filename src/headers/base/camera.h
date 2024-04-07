@@ -131,6 +131,7 @@ private:
 
 	ColorVec3 computePixelColor(const Ray& inputRay, int bounceDepthParam, const WorldObject& mainWorld, const WorldObject& lights) const
 	{
+		ScatterRecord tempScatterRec;
 		HitRecord tempRec;
 		Ray scatteredRay;
 		ColorVec3 attenuationValue;
@@ -145,34 +146,32 @@ private:
 		// If we don't hit anything, return scene bg color.
 		if (!mainWorld.checkHit(inputRay, Interval(0.001, +Uinf), tempRec))
 		{
-			
 			return sceneBackgroundColor;
 		}
 
 		ColorVec3 colorFromEmission = tempRec.hitMaterial->getEmittedLight(inputRay, tempRec, tempRec.hitTexU, tempRec.hitTexV, tempRec.hitPoint);
 		
-
 		// If there's no scatter (if we have emissive materials), return emission color.
-		if (!tempRec.hitMaterial->handleRayScatter(inputRay, scatteredRay, tempRec, attenuationValue, pdfDistValue))
+		if (!tempRec.hitMaterial->handleRayScatter(inputRay, tempRec, tempScatterRec))
 		{
 			return colorFromEmission;
 		}
 
+		if (tempScatterRec.skipPDF)
+		{
+			return tempScatterRec.attenuationParam * computePixelColor(tempScatterRec.skipPDFRay, bounceDepthParam - 1, mainWorld, lights);
+		}
+
 		auto lightPDF = std::make_shared<WOPDF>(lights, tempRec.hitPoint);
-		auto cosinePDF = std::make_shared<PDFCosine>(tempRec.hitNormalVec);
-		PDFMixture mixedPDF(lightPDF, cosinePDF);
+		PDFMixture mixedPDF(lightPDF, tempScatterRec.PDFPointer);
 
 		scatteredRay = Ray(tempRec.hitPoint, mixedPDF.genDirWithPDF(), inputRay.getRayTime());
 		pdfDistValue = mixedPDF.getPDFDistrValue(scatteredRay.getRayDirection());
-
 		auto scatteringPDF = tempRec.hitMaterial->scatteringPDF(inputRay, tempRec, scatteredRay);
-		
+
 		ColorVec3 sampleColor = computePixelColor(scatteredRay, bounceDepthParam - 1, mainWorld, lights);
 
-		ColorVec3 test = attenuationValue * scatteringPDF * sampleColor;
-
-		// Else, compute pixel color for scattered ray.
-		ColorVec3 colorFromScatter = (test) / pdfDistValue;
+		ColorVec3 colorFromScatter = (tempScatterRec.attenuationParam * scatteringPDF * sampleColor) / pdfDistValue;
 
 		return colorFromEmission + colorFromScatter;
 	}
@@ -196,7 +195,14 @@ private:
 						pixelColor += computePixelColor(generatedRay, maxRayBouncesDepth, mainWorld, lights);
 					}
 				}
-				
+
+				if (pixelColor.getX() != pixelColor.getX())
+					pixelColor.setX(0);
+				if (pixelColor.getY() != pixelColor.getY())
+					pixelColor.setY(0);
+				if (pixelColor.getZ() != pixelColor.getZ())
+					pixelColor.setZ(0);
+
 				pixelColor /= jitterSamplesAA;
 
 				pixelColor = linearToGamma(pixelColor);

@@ -41,7 +41,13 @@ public:
 	{
 		if (!WOList.empty())
 		{
-			return WOList[0]->getPDFVal(o, v);
+			auto weight = 1.0 / WOList.size();
+			auto sum = 0.0;
+
+			for (const auto& object : WOList)
+				sum += weight * object->getPDFVal(o, v);
+
+			return sum;
 		}
 		return 0;
 	}
@@ -50,7 +56,8 @@ public:
 	{
 		if (!WOList.empty())
 		{
-			return WOList[0]->getRandomDirWithPDF(o);
+			auto int_size = static_cast<int>(WOList.size());
+			return WOList[UGenRNGInt(0, int_size - 1)]->getRandomDirWithPDF(o);
 		}
 		return 0;
 	}

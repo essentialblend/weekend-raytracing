@@ -8,10 +8,12 @@ public:
 
 	MLambertian(std::shared_ptr<Texture> tex) : albedoTex(tex) {}
 
-	bool handleRayScatter(const Ray& inputRay, Ray& scatteredRay, const HitRecord& hitRec, ColorVec3& colorAttenuation, double& pdf) const override
+	bool handleRayScatter(const Ray& inputRay, const HitRecord& hitRec, ScatterRecord& scattRec) const override
 	{
-		
-		colorAttenuation = albedoTex->getTexColorAtCoords(hitRec.hitTexU, hitRec.hitTexV, hitRec.hitPoint);
+		scattRec.attenuationParam = albedoTex->getTexColorAtCoords(hitRec.hitTexU, hitRec.hitTexV, hitRec.hitPoint);
+		scattRec.PDFPointer = std::make_shared<PDFCosine>(hitRec.hitNormalVec);
+		scattRec.skipPDF = false;
+
 		return true;
 	}
 
